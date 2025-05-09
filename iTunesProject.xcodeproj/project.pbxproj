@@ -13,6 +13,7 @@
 		1442F9C42DCCA1D2004FF1CA /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 1442F9C32DCCA1D2004FF1CA /* RxCocoa */; };
 		1442F9C62DCCA1D2004FF1CA /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 1442F9C52DCCA1D2004FF1CA /* RxRelay */; };
 		1442F9C82DCCA1D2004FF1CA /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 1442F9C72DCCA1D2004FF1CA /* RxSwift */; };
+		1442F9F22DCDAAD8004FF1CA /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 1442F9F12DCDAAD8004FF1CA /* RxDataSources */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 				1442F9C42DCCA1D2004FF1CA /* RxCocoa in Frameworks */,
 				1442F9BE2DCCA1B2004FF1CA /* SnapKit in Frameworks */,
 				1442F9C82DCCA1D2004FF1CA /* RxSwift in Frameworks */,
+				1442F9F22DCDAAD8004FF1CA /* RxDataSources in Frameworks */,
 				1442F9C62DCCA1D2004FF1CA /* RxRelay in Frameworks */,
 				1442F9C12DCCA1BF004FF1CA /* Then in Frameworks */,
 			);
@@ -146,6 +148,7 @@
 				1442F9C32DCCA1D2004FF1CA /* RxCocoa */,
 				1442F9C52DCCA1D2004FF1CA /* RxRelay */,
 				1442F9C72DCCA1D2004FF1CA /* RxSwift */,
+				1442F9F12DCDAAD8004FF1CA /* RxDataSources */,
 			);
 			productName = iTunesProject;
 			productReference = 1432147C2DCC86CE0048FF59 /* iTunesProject.app */;
@@ -233,6 +236,7 @@
 				1442F9BC2DCCA1B2004FF1CA /* XCRemoteSwiftPackageReference "SnapKit" */,
 				1442F9BF2DCCA1BF004FF1CA /* XCRemoteSwiftPackageReference "Then" */,
 				1442F9C22DCCA1D2004FF1CA /* XCRemoteSwiftPackageReference "RxSwift" */,
+				1442F9F02DCDAAD8004FF1CA /* XCRemoteSwiftPackageReference "RxDataSources" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1432147D2DCC86CE0048FF59 /* Products */;
@@ -616,6 +620,14 @@
 				minimumVersion = 6.9.0;
 			};
 		};
+		1442F9F02DCDAAD8004FF1CA /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -643,6 +655,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1442F9C22DCCA1D2004FF1CA /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
+		};
+		1442F9F12DCDAAD8004FF1CA /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1442F9F02DCDAAD8004FF1CA /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

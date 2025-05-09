@@ -1,18 +1,18 @@
 //
-//  BaseTableViewCell.swift
+//  BaseCollectionViewCell.swift
 //  iTunesProject
 //
-//  Created by 백래훈 on 5/8/25.
+//  Created by 백래훈 on 5/9/25.
 //
 
 import UIKit
 
-class BaseTableViewCell: UITableViewCell {
+class BaseCollectionViewCell: UICollectionViewCell {
     
     private lazy var viewName = self.className
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setStyles()
         setLayouts()
     }
@@ -25,6 +25,9 @@ class BaseTableViewCell: UITableViewCell {
         super.prepareForReuse()
     }
     
-    func setStyles() {}
+    func setStyles() {
+        self.contentView.backgroundColor = .systemCyan
+    }
+    
     func setLayouts() {}
 }

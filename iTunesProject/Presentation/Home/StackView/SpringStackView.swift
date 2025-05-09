@@ -9,17 +9,6 @@ import UIKit
 
 import Then
 
-enum Season: String {
-    case spring = "봄 Best"
-    case summer = "여름"
-    case fall = "가을"
-    case winter = "겨울"
-}
-
-enum Description: String {
-    case spring = "봄에 어울리는 음악 Best 5"
-}
-
 final class SpringStackView: UIStackView {
     private let seasonLabel = UILabel().then {
         $0.text = Season.spring.rawValue

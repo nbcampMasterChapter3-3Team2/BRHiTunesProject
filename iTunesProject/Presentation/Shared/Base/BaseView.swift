@@ -23,7 +23,9 @@ class BaseView: UIView {
     }
     
     /// View 의 Style 을 set 합니다.
-    func setStyles() {}
+    func setStyles() {
+        self.backgroundColor = .systemBackground
+    }
     /// View 의 Layout 을 set 합니다.
     func setLayouts() {}
     
