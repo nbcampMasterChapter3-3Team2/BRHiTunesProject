@@ -36,12 +36,14 @@ final class OtherSeasonCollectionViewCell: BaseCollectionViewCell {
     private let verticalStackView = UIStackView().then {
         $0.axis = .vertical
         $0.distribution = .equalSpacing
+        $0.alignment = .leading
         $0.spacing = 4
     }
     
     private let horizontalStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.distribution = .fill
+        $0.alignment = .leading
         $0.spacing = 8
     }
     

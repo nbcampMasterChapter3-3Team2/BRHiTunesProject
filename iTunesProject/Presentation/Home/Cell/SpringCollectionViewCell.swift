@@ -45,12 +45,14 @@ final class SpringCollectionViewCell: BaseCollectionViewCell {
         $0.axis = .vertical
         $0.spacing = 4
         $0.distribution = .equalSpacing
+        $0.alignment = .leading
     }
     
     private let horizontalStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 8
         $0.distribution = .fill
+        $0.alignment = .leading
     }
     
     override func prepareForReuse() {
