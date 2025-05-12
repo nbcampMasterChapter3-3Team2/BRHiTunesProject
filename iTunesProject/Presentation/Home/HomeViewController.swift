@@ -10,9 +10,15 @@ import UIKit
 import RxSwift
 import RxRelay
 import RxDataSources
+import SnapKit
+import Then
 
 final class HomeViewController: BaseViewController {
     //MARK: - UI Components
+    let searchController = UISearchController().then {
+        $0.searchBar.placeholder = "영화, 팟캐스트"
+    }
+    
     let homeView = HomeView()
     
     //MARK: - Instances
@@ -24,7 +30,7 @@ final class HomeViewController: BaseViewController {
     //MARK: - View Life Cycles
     override func loadView() {
         super.loadView()
-        view = homeView
+        
     }
     
     override func viewDidLoad() {
@@ -39,8 +45,12 @@ final class HomeViewController: BaseViewController {
     //MARK: SetStyles
     override func setStyles() {
         super.setStyles()
+        self.view.backgroundColor = .systemBackground
         
+        self.navigationItem.searchController = searchController
         self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.largeTitleDisplayMode = .always
+        self.navigationItem.hidesSearchBarWhenScrolling = false
         self.navigationItem.title = "Music"
         
         homeView.otherSeasonCollectionView.collectionViewLayout = UICollectionViewCompositionalLayout { section, _ -> NSCollectionLayoutSection? in
@@ -51,13 +61,16 @@ final class HomeViewController: BaseViewController {
                 return HomeView.otherSeasonSectionLayout()
             }
         }
-        
     }
     
     //MARK: SetLayouts
     override func setLayouts() {
         super.setLayouts()
+        self.view.addSubview(homeView)
         
+        homeView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
     }
     
     //MARK: SetDelegates
@@ -81,26 +94,21 @@ final class HomeViewController: BaseViewController {
     
     // MARK: bindEvents
     private func bindEvents() {
-        homeView.getSearchBar().rx.textDidBeginEditing
+        searchController.searchBar.rx.textDidBeginEditing
             .bind(with: self) { owner, _ in
-                let searchBar = owner.homeView.getSearchBar()
-                searchBar.showsCancelButton = true
-                if let cancelButton = searchBar.value(forKey: "cancelButton") as? UIButton {
+                owner.searchController.searchBar.showsCancelButton = true
+                if let cancelButton = owner.searchController.searchBar.value(forKey: "cancelButton") as? UIButton {
                     cancelButton.setTitle("취소", for: .normal)
+//                    cancelButton.setTitleColor(.black, for: .normal)
+//                    cancelButton.tintColor = .black
                 }
             }
             .disposed(by: disposeBag)
         
-        homeView.getSearchBar().rx.textDidEndEditing
+        searchController.searchBar.rx.cancelButtonClicked
             .bind(with: self) { owner, _ in
-                owner.homeView.getSearchBar().showsCancelButton = false
-            }
-            .disposed(by: disposeBag)
-        
-        homeView.getSearchBar().rx.cancelButtonClicked
-            .bind(with: self) { owner, _ in
-                owner.homeView.getSearchBar().showsCancelButton = false
-                owner.homeView.getSearchBar().text = ""
+                owner.searchController.searchBar.text = ""
+                owner.searchController.searchBar.showsCancelButton = false
                 owner.view.endEditing(true)
             }
             .disposed(by: disposeBag)

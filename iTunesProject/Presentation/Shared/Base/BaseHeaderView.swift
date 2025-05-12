@@ -27,7 +27,7 @@ class BaseHeaderView: UICollectionReusableView {
     
     //MARK: SetStyles
     func setStyles() {
-
+        
     }
     
     //MARK: SetLayouts
