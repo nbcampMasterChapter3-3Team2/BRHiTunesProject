@@ -12,7 +12,7 @@ import Then
 
 final class TitleHeaderView: BaseHeaderView {
     private let titleLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 22, weight: .black)
+        $0.font = .systemFont(ofSize: 25, weight: .bold)
         $0.textColor = .label
     }
     

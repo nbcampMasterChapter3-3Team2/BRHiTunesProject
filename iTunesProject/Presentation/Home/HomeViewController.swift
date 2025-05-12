@@ -33,18 +33,22 @@ final class HomeViewController: BaseViewController {
         bindCollectionView()
         // action bind
         bindAction()
+        bindEvents()
     }
     
     //MARK: SetStyles
     override func setStyles() {
         super.setStyles()
         
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.title = "Music"
+        
         homeView.otherSeasonCollectionView.collectionViewLayout = UICollectionViewCompositionalLayout { section, _ -> NSCollectionLayoutSection? in
             switch self.cells.value[section] {
             case .spring:
-                return HomeView.createSpringSectionLayout()
+                return HomeView.springSeasonSectionLayout()
             case .summer, .fall, .winter:
-                return HomeView.createOtherSectionLayout()
+                return HomeView.otherSeasonSectionLayout()
             }
         }
         
@@ -73,6 +77,37 @@ final class HomeViewController: BaseViewController {
     // MARK: bindAction
     private func bindAction() {
         homeViewModel.action.onNext(.viewDidLoad)
+    }
+    
+    // MARK: bindEvents
+    private func bindEvents() {
+        homeView.getSearchBar().rx.textDidBeginEditing
+            .bind(with: self) { owner, _ in
+                let searchBar = owner.homeView.getSearchBar()
+                searchBar.showsCancelButton = true
+                if let cancelButton = searchBar.value(forKey: "cancelButton") as? UIButton {
+                    cancelButton.setTitle("취소", for: .normal)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        homeView.getSearchBar().rx.textDidEndEditing
+            .bind(with: self) { owner, _ in
+                owner.homeView.getSearchBar().showsCancelButton = false
+            }
+            .disposed(by: disposeBag)
+        
+        homeView.getSearchBar().rx.cancelButtonClicked
+            .bind(with: self) { owner, _ in
+                owner.homeView.getSearchBar().showsCancelButton = false
+                owner.homeView.getSearchBar().text = ""
+                owner.view.endEditing(true)
+            }
+            .disposed(by: disposeBag)
+        
+        let tapGestrue = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGestrue.cancelsTouchesInView = false
+        homeView.getOtherSeasonCollectionView().addGestureRecognizer(tapGestrue)
     }
     
     //MARK: Methods

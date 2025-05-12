@@ -27,7 +27,7 @@ class BaseHeaderView: UICollectionReusableView {
     
     //MARK: SetStyles
     func setStyles() {
-        self.backgroundColor = .systemMint
+
     }
     
     //MARK: SetLayouts

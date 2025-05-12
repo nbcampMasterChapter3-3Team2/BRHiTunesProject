@@ -14,7 +14,6 @@ final class OtherSeasonCollectionViewCell: BaseCollectionViewCell {
     //MARK: - UI Components
     private let albumImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
-        $0.backgroundColor = .black
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 8
     }

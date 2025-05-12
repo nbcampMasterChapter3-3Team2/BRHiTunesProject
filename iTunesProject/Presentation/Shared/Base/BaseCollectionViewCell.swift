@@ -26,7 +26,7 @@ class BaseCollectionViewCell: UICollectionViewCell {
     }
     
     func setStyles() {
-        self.contentView.backgroundColor = .systemCyan
+        
     }
     
     func setLayouts() {}

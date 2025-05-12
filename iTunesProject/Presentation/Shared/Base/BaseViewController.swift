@@ -21,6 +21,7 @@ class BaseViewController: UIViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
         self.view.endEditing(true)
     }
     
@@ -34,6 +35,10 @@ class BaseViewController: UIViewController {
     func setDelegates() {}
     /// View 의 Register 를 set 합니다.
     func setRegisters() {}
+    
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
+    }
     
     deinit {
         print("🧶 \(viewControllerName) is deinited")
