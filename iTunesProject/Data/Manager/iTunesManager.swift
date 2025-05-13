@@ -12,14 +12,13 @@ import RxSwift
 final class iTunesManager {
     static let shared = iTunesManager()
     
-    private let baseURL = "https://itunes.apple.com/search"
-    
     private init() {}
     
     func fetchData<T: Decodable>(target: iTuensRequest) -> Single<T> {
-        return Single.create { [weak self] single in
-            guard let self,
-                  var components = URLComponents(string: baseURL) else {
+        return Single.create { single in
+            guard let baseUrlString = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String,
+                  let baseURL = URL(string: "https://\(baseUrlString)"),
+                  var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false) else {
                 single(.failure(NSError(domain: "Invalid URL", code: -1)))
                 return Disposables.create()
             }
