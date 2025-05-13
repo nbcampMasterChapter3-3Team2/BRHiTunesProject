@@ -8,7 +8,6 @@
 import UIKit
 
 import RxSwift
-import RxRelay
 import RxDataSources
 import SnapKit
 import Then
@@ -24,8 +23,6 @@ final class HomeViewController: BaseViewController {
     //MARK: - Instances
     let homeViewModel = HomeViewModel()
     let disposeBag = DisposeBag()
-    
-    var cells = BehaviorRelay<[MusicSection]>(value: [])
     
     //MARK: - View Life Cycles
     override func loadView() {
@@ -77,8 +74,6 @@ final class HomeViewController: BaseViewController {
     //MARK: SetDelegates
     override func setDelegates() {
         super.setDelegates()
-//        homeView.otherSeasonCollectionView.delegate = self
-//        homeView.otherSeasonCollectionView.dataSource = self
         
     }
     
@@ -173,93 +168,5 @@ final class HomeViewController: BaseViewController {
         let tapGestrue = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGestrue.cancelsTouchesInView = false
         homeView.getOtherSeasonCollectionView().addGestureRecognizer(tapGestrue)
-        
-        
     }
-    
-    
 }
-
-//extension HomeViewController: UICollectionViewDataSource {
-//    func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        self.cells.value.count
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        switch self.cells.value[section] {
-//        case .spring(_, let items):
-//            return items.count
-//            
-//        case .summer(_, let items):
-//            return items.count
-//            
-//        case .fall(_, let items):
-//            return items.count
-//            
-//        case .winter(_, let items):
-//            return items.count
-//        }
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        switch self.cells.value[indexPath.section] {
-//        case .spring(_, let items):
-//            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SpringCollectionViewCell.className, for: indexPath) as? SpringCollectionViewCell else {
-//                return UICollectionViewCell()
-//            }
-//            cell.configureCell(items[indexPath.item])
-//            return cell
-//            
-//        case .summer(_, let items):
-//            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OtherSeasonCollectionViewCell.className, for: indexPath) as? OtherSeasonCollectionViewCell else {
-//                return UICollectionViewCell()
-//            }
-//            let isLast = (indexPath.item % 3 == 2) || (indexPath.item == items.count - 1)
-//            cell.configureCell(items[indexPath.item], isLast: isLast)
-//            return cell
-//            
-//        case .fall(_, let items):
-//            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OtherSeasonCollectionViewCell.className, for: indexPath) as? OtherSeasonCollectionViewCell else {
-//                return UICollectionViewCell()
-//            }
-//            let isLast = (indexPath.item % 3 == 2) || (indexPath.item == items.count - 1)
-//            cell.configureCell(items[indexPath.item], isLast: isLast)
-//            return cell
-//            
-//        case .winter(_, let items):
-//            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OtherSeasonCollectionViewCell.className, for: indexPath) as? OtherSeasonCollectionViewCell else {
-//                return UICollectionViewCell()
-//            }
-//            let isLast = (indexPath.item % 3 == 2) || (indexPath.item == items.count - 1)
-//            cell.configureCell(items[indexPath.item], isLast: isLast)
-//            return cell
-//        }
-//    }
-//    
-//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-//        switch kind {
-//        case UICollectionView.elementKindSectionHeader:
-//            guard let header = collectionView.dequeueReusableSupplementaryView(
-//                ofKind: UICollectionView.elementKindSectionHeader,
-//                withReuseIdentifier: TitleHeaderView.className,
-//                for: indexPath
-//            ) as? TitleHeaderView else { return UICollectionReusableView() }
-//            
-//            // 🔍 섹션의 헤더 정보 꺼내기
-//            let headerInfo: Header
-//            
-//            switch self.cells.value[indexPath.section] {
-//            case .spring(let headerData, _),
-//                    .summer(let headerData, _),
-//                    .fall(let headerData, _),
-//                    .winter(let headerData, _):
-//                headerInfo = headerData
-//            }
-//            header.configureView(headerInfo)
-//            return header
-//            
-//        default:
-//            return UICollectionReusableView()
-//        }
-//    }
-//}
