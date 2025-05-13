@@ -7,6 +7,7 @@
 
 import UIKit
 
+import RxSwift
 import SnapKit
 import Then
 
@@ -52,6 +53,15 @@ final class OtherSeasonCollectionViewCell: BaseCollectionViewCell {
         $0.isHidden = true
     }
     
+    var disposeBag = DisposeBag()
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        prepare()
+        disposeBag = DisposeBag()
+    }
+    
     //MARK: - SetStyles
     override func setStyles() {
         super.setStyles()
@@ -82,11 +92,17 @@ final class OtherSeasonCollectionViewCell: BaseCollectionViewCell {
     }
     
     //MARK: - Methods
-    func configureCell(_ item: MusicModel, isLast: Bool) {
-        self.albumImageView.image = item.albumImage
-        self.titleOfSongLabel.text = item.titleOfSong
-        self.singerLabel.text = item.singer
-        self.titleOfAlbumLabel.text = item.titleOfAlbum
+    func configureCell(_ item: MusicEntity, isLast: Bool) {
+        ImageLoader.shared.loadImage(from: item.artworkURL)
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self) { owner, image in
+                owner.albumImageView.image = image
+            }
+            .disposed(by: disposeBag)
+        
+        self.titleOfSongLabel.text = item.trackName
+        self.singerLabel.text = item.artistName
+        self.titleOfAlbumLabel.text = item.collectionName
         self.separator.isHidden = isLast
     }
     

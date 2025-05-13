@@ -7,6 +7,7 @@
 
 import UIKit
 
+import RxSwift
 import SnapKit
 import Then
 
@@ -55,9 +56,13 @@ final class SpringCollectionViewCell: BaseCollectionViewCell {
         $0.alignment = .leading
     }
     
+    //MARK: - Instances
+    var disposeBag = DisposeBag()
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         prepare()
+        disposeBag = DisposeBag()
     }
     
     //MARK: - SetStyles
@@ -94,11 +99,17 @@ final class SpringCollectionViewCell: BaseCollectionViewCell {
     }
     
     //MARK: - Methods
-    func configureCell(_ item: MusicModel) {
-        self.albumImageView.image = item.albumImage
-        self.titleOfSongLabel.text = item.titleOfSong
-        self.singerLabel.text = item.singer
-        self.subAlbumImageView.image = item.albumImage
+    func configureCell(_ item: MusicEntity) {
+        ImageLoader.shared.loadImage(from: item.artworkURL)
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self) { owner, image in
+                owner.albumImageView.image = image
+                owner.subAlbumImageView.image = image
+            }
+            .disposed(by: disposeBag)
+        
+        self.titleOfSongLabel.text = item.trackName
+        self.singerLabel.text = item.artistName
     }
     
     func prepare() {

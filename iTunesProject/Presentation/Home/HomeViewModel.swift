@@ -17,7 +17,7 @@ final class HomeViewModel: ViewModelProtocol {
     }
     
     struct State {
-        let home = PublishRelay<[MusicSection]>()
+        let home = BehaviorRelay<[MusicSectionModel]>(value: [])
     }
     
     var action: AnyObserver<Action> { actionSubject.asObserver() }
@@ -37,7 +37,7 @@ final class HomeViewModel: ViewModelProtocol {
             .subscribe(with: self) { owner, action in
                 switch action {
                 case .viewDidLoad:
-                    owner.fetchMockData()
+                    owner.fetchData()
                 case .didBeginEditing:
                     return
                 }
@@ -45,71 +45,25 @@ final class HomeViewModel: ViewModelProtocol {
             .disposed(by: disposeBag)
     }
     
-    private func fetchMockData() {
-        useCase.fetchFallTheme()
-            .subscribe { entitys in
-                print(entitys)
-            } onFailure: { error in
-                print(error)
-            }
-            .disposed(by: disposeBag)
-
-        
-        let sectionData = [
-            MusicSection.spring(
-                Header(title: "봄 Best", subTitle: "봄에 어울리는 음악 Best 5"),
-                [
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Spring", singer: "Spring", titleOfAlbum: "Spring"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Spring", singer: "Spring", titleOfAlbum: "Spring"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Spring", singer: "Spring", titleOfAlbum: "Spring"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Spring", singer: "Spring", titleOfAlbum: "Spring"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Spring", singer: "Spring", titleOfAlbum: "Spring"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Spring", singer: "Spring", titleOfAlbum: "Spring")
-                ]
-            ),
-            MusicSection.summer(
-                Header(title: "여름", subTitle: "여름에 어울리는 음악"),
-                [
-                    MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Summer", singer: "Summer", titleOfAlbum: "Summer"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Summer", singer: "Summer", titleOfAlbum: "Summer"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Summer", singer: "Summer", titleOfAlbum: "Summer"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Summer", singer: "Summer", titleOfAlbum: "Summer"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Summer", singer: "Summer", titleOfAlbum: "Summer"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Summer", singer: "Summer", titleOfAlbum: "Summer"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Summer", singer: "Summer", titleOfAlbum: "Summer"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Summer", singer: "Summer", titleOfAlbum: "Summer"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Summer", singer: "Summer", titleOfAlbum: "Summer")
-                ]
-            ),
-            MusicSection.fall(
-                Header(title: "가을", subTitle: "가을에 어울리는 음악"),
-                [
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Fall", singer: "Fall", titleOfAlbum: "Fall"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Fall", singer: "Fall", titleOfAlbum: "Fall"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Fall", singer: "Fall", titleOfAlbum: "Fall"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Fall", singer: "Fall", titleOfAlbum: "Fall"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Fall", singer: "Fall", titleOfAlbum: "Fall"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Fall", singer: "Fall", titleOfAlbum: "Fall"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Fall", singer: "Fall", titleOfAlbum: "Fall"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Fall", singer: "Fall", titleOfAlbum: "Fall"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Fall", singer: "Fall", titleOfAlbum: "Fall")
-                ]
-            ),
-            MusicSection.winter(
-                Header(title: "겨울", subTitle: "겨울에 어울리는 음악"),
-                [
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Winter", singer: "Winter", titleOfAlbum: "Winter"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Winter", singer: "Winter", titleOfAlbum: "Winter"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Winter", singer: "Winter", titleOfAlbum: "Winter"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Winter", singer: "Winter", titleOfAlbum: "Winter"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Winter", singer: "Winter", titleOfAlbum: "Winter"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Winter", singer: "Winter", titleOfAlbum: "Winter"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Winter", singer: "Winter", titleOfAlbum: "Winter"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Winter", singer: "Winter", titleOfAlbum: "Winter"),
-                MusicModel(albumImage: UIImage(resource: .made), titleOfSong: "Winter", singer: "Winter", titleOfAlbum: "Winter")
-                ]
-            )
-        ]
-        state.home.accept(sectionData)
+    private func fetchData() {
+        Single.zip(
+            useCase.fetchSpringTheme(),
+            useCase.fetchSummerTheme(),
+            useCase.fetchFallTheme(),
+            useCase.fetchWinterTheme())
+        .map { springs, summers, falls, winters -> [MusicSectionModel] in
+            return [
+                MusicSectionModel(header: Header(title: Season.spring, subTitle: "봄에 어울리는 음악 Best 5"), items: springs),
+                MusicSectionModel(header: Header(title: Season.summer, subTitle: "여름에 어울리는 음악"), items: summers),
+                MusicSectionModel(header: Header(title: Season.fall, subTitle: "가을에 어울리는 음악"), items: falls),
+                MusicSectionModel(header: Header(title: Season.winter, subTitle: "겨울에 어울리는 음악"), items: winters)
+            ]
+        }
+        .subscribe(with: self) { owner, sectionModels in
+            owner.state.home.accept(sectionModels)
+        } onFailure: { owner, error in
+            print("Single Zip Error: \(error)")
+        }
+        .disposed(by: disposeBag)
     }
 }

@@ -17,18 +17,18 @@ struct MusicModel {
 }
 
 struct Header {
-    let title: String
+    let title: Season
     let subTitle: String
 }
 struct MusicSectionModel {
     let header: Header
-    var items: [MusicModel]
+    var items: [MusicEntity]
 }
 
 extension MusicSectionModel: SectionModelType {
-    typealias Item = MusicModel
+    typealias Item = MusicEntity
     
-    init(original: MusicSectionModel, items: [MusicModel]) {
+    init(original: MusicSectionModel, items: [MusicEntity]) {
         self = original
         self.items = items
     }

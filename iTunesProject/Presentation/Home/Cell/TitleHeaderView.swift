@@ -51,7 +51,7 @@ final class TitleHeaderView: BaseHeaderView {
     
     //MARK: - Methods
     func configureView(_ item: Header) {
-        self.titleLabel.text = item.title
+        self.titleLabel.text = item.title.sectionTitle
         self.subtitleLabel.text = item.subTitle
     }
     

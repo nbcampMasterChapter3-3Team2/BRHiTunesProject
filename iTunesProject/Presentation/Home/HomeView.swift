@@ -50,7 +50,7 @@ extension HomeView {
             heightDimension: .fractionalHeight(1.0)  // 배너 이미지 크기에 따라 조정 가능
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = .init(top: 0, leading: 8, bottom: 0, trailing: 8)
+        item.contentInsets = .init(top: 8, leading: 8, bottom: 0, trailing: 8)
         
         // 2) 그룹 – 아이템 3개를 세로로 쌓음
         let groupSize = NSCollectionLayoutSize(
