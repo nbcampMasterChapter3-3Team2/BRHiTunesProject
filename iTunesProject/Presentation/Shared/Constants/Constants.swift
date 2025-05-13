@@ -36,3 +36,8 @@ enum Description: String {
 enum PlaceholderText: String {
     case homeSearchBar = "영화, 팟캐스트"
 }
+
+enum Search: String {
+    case podcast = "PodCast"
+    case movie = "Movie"
+}

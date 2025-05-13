@@ -16,11 +16,12 @@ final class HomeViewController: BaseViewController {
     //MARK: - UI Components
     let searchController = UISearchController().then {
         $0.searchBar.placeholder = "영화, 팟캐스트"
+        $0.obscuresBackgroundDuringPresentation = true
+//        $0.searchResultsController = nil
     }
     
-    let homeView = HomeView()
-    
     //MARK: - Instances
+    let homeView = HomeView()
     let homeViewModel = HomeViewModel()
     let disposeBag = DisposeBag()
     
@@ -43,6 +44,7 @@ final class HomeViewController: BaseViewController {
     //MARK: SetStyles
     override func setStyles() {
         super.setStyles()
+        
         self.view.backgroundColor = .systemBackground
         
         homeView.otherSeasonCollectionView.collectionViewLayout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env -> NSCollectionLayoutSection? in
@@ -54,9 +56,9 @@ final class HomeViewController: BaseViewController {
             let section = sections[sectionIndex]
             switch section.header.title {
             case .spring:
-                return HomeView.springSeasonSectionLayout()
+                return NSCollectionLayoutSection.springSeasonSectionLayout()
             case .summer, .fall,.winter:
-                return HomeView.otherSeasonSectionLayout()
+                return NSCollectionLayoutSection.otherSeasonSectionLayout()
             }
         }
     }
@@ -64,6 +66,7 @@ final class HomeViewController: BaseViewController {
     //MARK: SetLayouts
     override func setLayouts() {
         super.setLayouts()
+        
         self.view.addSubview(homeView)
         
         homeView.snp.makeConstraints {
@@ -123,8 +126,8 @@ final class HomeViewController: BaseViewController {
                 case UICollectionView.elementKindSectionHeader:
                     guard let header = collectionView.dequeueReusableSupplementaryView(
                         ofKind: UICollectionView.elementKindSectionHeader,
-                        withReuseIdentifier: TitleHeaderView.className,
-                        for: indexPath) as? TitleHeaderView else {
+                        withReuseIdentifier: HomeTitleHeaderView.className,
+                        for: indexPath) as? HomeTitleHeaderView else {
                         return UICollectionReusableView()
                     }
                     let section = dataSource.sectionModels[indexPath.section]
@@ -164,9 +167,5 @@ final class HomeViewController: BaseViewController {
                 owner.view.endEditing(true)
             }
             .disposed(by: disposeBag)
-        
-        let tapGestrue = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGestrue.cancelsTouchesInView = false
-        homeView.getOtherSeasonCollectionView().addGestureRecognizer(tapGestrue)
     }
 }

@@ -9,19 +9,13 @@ import UIKit
 
 import RxDataSources
 
-struct MusicModel {
-    let albumImage: UIImage
-    let titleOfSong: String
-    let singer: String
-    let titleOfAlbum: String
-}
-
-struct Header {
+struct HomeHeader {
     let title: Season
     let subTitle: String
 }
+
 struct MusicSectionModel {
-    let header: Header
+    let header: HomeHeader
     var items: [MusicEntity]
 }
 
@@ -34,9 +28,27 @@ extension MusicSectionModel: SectionModelType {
     }
 }
 
-enum MusicSection {
-    case spring(Header, [MusicModel])
-    case summer(Header, [MusicModel])
-    case fall(Header, [MusicModel])
-    case winter(Header, [MusicModel])
+struct SearchEntity {
+    let trackName: String
+    let artistName: String
+    let artworkURL: String
+    let collectionName: String
+}
+
+struct SearchHeader {
+    let title: Search
+}
+
+struct SearchSectionModel {
+    let header: SearchHeader
+    var items: [SearchEntity]
+}
+
+extension SearchSectionModel: SectionModelType {
+    typealias Item = SearchEntity
+    
+    init(original: SearchSectionModel, items: [SearchEntity]) {
+        self = original
+        self.items = items
+    }
 }

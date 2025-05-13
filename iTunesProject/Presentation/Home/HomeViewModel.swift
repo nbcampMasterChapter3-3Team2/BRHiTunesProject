@@ -53,10 +53,10 @@ final class HomeViewModel: ViewModelProtocol {
             useCase.fetchWinterTheme())
         .map { springs, summers, falls, winters -> [MusicSectionModel] in
             return [
-                MusicSectionModel(header: Header(title: Season.spring, subTitle: "봄에 어울리는 음악 Best 5"), items: springs),
-                MusicSectionModel(header: Header(title: Season.summer, subTitle: "여름에 어울리는 음악"), items: summers),
-                MusicSectionModel(header: Header(title: Season.fall, subTitle: "가을에 어울리는 음악"), items: falls),
-                MusicSectionModel(header: Header(title: Season.winter, subTitle: "겨울에 어울리는 음악"), items: winters)
+                MusicSectionModel(header: HomeHeader(title: Season.spring, subTitle: "봄에 어울리는 음악 Best 5"), items: springs),
+                MusicSectionModel(header: HomeHeader(title: Season.summer, subTitle: "여름에 어울리는 음악"), items: summers),
+                MusicSectionModel(header: HomeHeader(title: Season.fall, subTitle: "가을에 어울리는 음악"), items: falls),
+                MusicSectionModel(header: HomeHeader(title: Season.winter, subTitle: "겨울에 어울리는 음악"), items: winters)
             ]
         }
         .subscribe(with: self) { owner, sectionModels in

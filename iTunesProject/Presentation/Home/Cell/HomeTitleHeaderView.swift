@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class TitleHeaderView: BaseHeaderView {
+final class HomeTitleHeaderView: BaseHeaderView {
     private let titleLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 25, weight: .bold)
         $0.textColor = .label
@@ -50,7 +50,7 @@ final class TitleHeaderView: BaseHeaderView {
     }
     
     //MARK: - Methods
-    func configureView(_ item: Header) {
+    func configureView(_ item: HomeHeader) {
         self.titleLabel.text = item.title.sectionTitle
         self.subtitleLabel.text = item.subTitle
     }
