@@ -11,7 +11,7 @@ import Then
 
 final class OtherSeasonStackView: UIStackView {
     private lazy var seasonLabel = UILabel().then {
-        $0.text = seasonTitle.rawValue
+        $0.text = seasonTitle.sectionTitle
         $0.textColor = .label
         $0.font = .systemFont(ofSize: 20, weight: .bold)
     }

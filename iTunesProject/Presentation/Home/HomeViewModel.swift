@@ -26,6 +26,8 @@ final class HomeViewModel: ViewModelProtocol {
     let state = State()
     let disposeBag = DisposeBag()
     
+    private let useCase = MusicUseCase(repository: MusicRepositoryInterface())
+    
     init() {
         bind()
     }
@@ -44,6 +46,15 @@ final class HomeViewModel: ViewModelProtocol {
     }
     
     private func fetchMockData() {
+        useCase.fetchFallTheme()
+            .subscribe { entitys in
+                print(entitys)
+            } onFailure: { error in
+                print(error)
+            }
+            .disposed(by: disposeBag)
+
+        
         let sectionData = [
             MusicSection.spring(
                 Header(title: "봄 Best", subTitle: "봄에 어울리는 음악 Best 5"),
