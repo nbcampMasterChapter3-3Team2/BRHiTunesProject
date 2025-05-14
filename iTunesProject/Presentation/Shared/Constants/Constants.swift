@@ -42,3 +42,17 @@ enum Search: String {
     case podcast = "PodCast"
     case movie = "Movie"
 }
+
+enum RecommendEmoji {
+    static let podcastRecommendations = [
+        "🔥 TRENDING NOW",
+        "🎧 EDITOR’S PICK",
+        "🗓 WEEKLY HIGHLIGHT",
+        "⭐️ FEATURED SHOW",
+        "🎙 JUST DROPPED",
+        "📡 TOP PODCAST",
+        "🎤 IN THE SPOTLIGHT",
+        "🎯 DON’T MISS THIS",
+        "📌 FOCUS ON"
+    ]
+}

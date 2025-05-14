@@ -33,7 +33,13 @@ final class HomeTitleHeaderView: BaseHeaderView {
         self.prepare()
     }
     
-    //MARK: - SetStyles
+    //MARK: PrePare
+    override func prepare() {
+        self.titleLabel.text = nil
+        self.subtitleLabel.text = nil
+    }
+    
+    //MARK: SetStyles
     override func setStyles() {
         super.setStyles()
         
@@ -41,7 +47,7 @@ final class HomeTitleHeaderView: BaseHeaderView {
         self.stackView.addArrangedSubviews(titleLabel, subtitleLabel)
     }
     
-    //MARK: - SetLayouts
+    //MARK: SetLayouts
     override func setLayouts() {
         stackView.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview().inset(8)
@@ -49,14 +55,9 @@ final class HomeTitleHeaderView: BaseHeaderView {
         }
     }
     
-    //MARK: - Methods
+    //MARK: Methods
     func configureView(_ item: HomeHeader) {
         self.titleLabel.text = item.title.sectionTitle
         self.subtitleLabel.text = item.subTitle
-    }
-    
-    func prepare() {
-        self.titleLabel.text = nil
-        self.subtitleLabel.text = nil
     }
 }

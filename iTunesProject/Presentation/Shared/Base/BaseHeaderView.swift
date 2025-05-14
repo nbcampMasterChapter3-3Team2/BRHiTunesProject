@@ -26,12 +26,11 @@ class BaseHeaderView: UICollectionReusableView {
     }
     
     //MARK: SetStyles
-    func setStyles() {
-        
-    }
+    func setStyles() {}
     
     //MARK: SetLayouts
-    func setLayouts() {
-        
-    }
+    func setLayouts() {}
+    
+    //MARK: Prepare
+    func prepare() {}
 }

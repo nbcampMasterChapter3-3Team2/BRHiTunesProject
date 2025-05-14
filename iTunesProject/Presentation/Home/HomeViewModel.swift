@@ -26,7 +26,7 @@ final class HomeViewModel: ViewModelProtocol {
     let state = State()
     let disposeBag = DisposeBag()
     
-    private let useCase = MusicUseCase(repository: MusicRepositoryInterface())
+    private let useCase = MusicUseCase(repository: MusicRepository())
     
     init() {
         bind()

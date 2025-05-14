@@ -38,7 +38,7 @@ final class SearchViewController: BaseViewController {
         searchView.searchCollectionView.collectionViewLayout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env -> NSCollectionLayoutSection? in
             
             guard let self else { return nil }
-            let sections = self.searchViewModel.state.home.value
+            let sections = self.searchViewModel.state.search.value
             guard sectionIndex < sections.count else { return nil }
             
             let section = sections[sectionIndex]
@@ -75,7 +75,12 @@ final class SearchViewController: BaseViewController {
                         for: indexPath) as? SearchCollectionViewCell else {
                         return UICollectionViewCell()
                     }
-                    cell.configureCell(items[indexPath.row])
+                    switch item {
+                    case .podcast(let podcast):
+                        cell.configureCell(SearchItem.podcast(podcast))
+                    case .movie(let movie):
+                        cell.configureCell(SearchItem.movie(movie))
+                    }
                     return cell
                 }
             }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
@@ -87,8 +92,8 @@ final class SearchViewController: BaseViewController {
                     case .search:
                         guard let header = collectionView.dequeueReusableSupplementaryView(
                             ofKind: UICollectionView.elementKindSectionHeader,
-                            withReuseIdentifier: SearchTitleHeaderVIew.className,
-                            for: indexPath) as? SearchTitleHeaderVIew else {
+                            withReuseIdentifier: SearchTitleHeaderView.className,
+                            for: indexPath) as? SearchTitleHeaderView else {
                             return UICollectionReusableView()
                         }
                         header.configureView(section.header)
@@ -108,7 +113,7 @@ final class SearchViewController: BaseViewController {
                 }
             })
 
-        searchViewModel.state.home
+        searchViewModel.state.search
             .bind(to: searchView.searchCollectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
     }

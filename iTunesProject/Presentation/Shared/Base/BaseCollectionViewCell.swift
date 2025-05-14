@@ -25,9 +25,9 @@ class BaseCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
     }
     
-    func setStyles() {
-        
-    }
+    func setStyles() {}
     
     func setLayouts() {}
+    
+    func prepare() {}
 }

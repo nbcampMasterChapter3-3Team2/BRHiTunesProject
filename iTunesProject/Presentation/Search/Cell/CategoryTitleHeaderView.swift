@@ -21,6 +21,10 @@ final class CategoryTitleHeaderView: BaseHeaderView {
         self.prepare()
     }
     
+    override func prepare() {
+        self.titleLabel.text = nil
+    }
+    
     //MARK: - SetStyles
     override func setStyles() {
         super.setStyles()
@@ -39,9 +43,5 @@ final class CategoryTitleHeaderView: BaseHeaderView {
     //MARK: - Methods
     func configureView(_ item: SearchHeader) {
         self.titleLabel.text = item.title.rawValue
-    }
-    
-    func prepare() {
-        self.titleLabel.text = nil
     }
 }

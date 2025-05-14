@@ -14,7 +14,7 @@ final class iTunesManager {
     
     private init() {}
     
-    func fetchData<T: Decodable>(target: iTuensRequest) -> Single<T> {
+    func fetchData<T: Decodable>(target: iTunesRequest) -> Single<T> {
         return Single.create { single in
             guard let baseUrlString = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String,
                   let baseURL = URL(string: "https://\(baseUrlString)"),

@@ -10,6 +10,7 @@ import Foundation
 import RxSwift
 
 final class MusicUseCase: MusicUseCaseInterface {
+    
     private let repository: MusicRepositoryInterface
     
     init(repository: MusicRepositoryInterface) {

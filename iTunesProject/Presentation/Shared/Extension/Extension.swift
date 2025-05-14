@@ -18,6 +18,40 @@ extension NSObject {
     }
 }
 
+//MARK: - Extension String
+extension String {
+    static func genreEmoji(for genre: String) -> String {
+        let lowercased = genre.lowercased()
+        
+        switch lowercased {
+        case _ where lowercased.contains("action"):
+            return "💥"
+        case _ where lowercased.contains("comedy"):
+            return "😂"
+        case _ where lowercased.contains("drama"):
+            return "🎬"
+        case _ where lowercased.contains("horror"), _ where genre.contains("thriller"):
+            return "👻"
+        case _ where lowercased.contains("romance"):
+            return "💘"
+        case _ where lowercased.contains("sci-fi"):
+            return "🚀"
+        case _ where lowercased.contains("fantasy"):
+            return "🐉"
+        case _ where lowercased.contains("musical"):
+            return "🎶"
+        case _ where lowercased.contains("mystery"):
+            return "🕵️"
+        case _ where lowercased.contains("documentary"):
+            return "🎥"
+        case _ where lowercased.contains("superhero"):
+            return "🦸"
+        default:
+            return "🎞️"
+        }
+    }
+}
+
 //MARK: - Extension UIView
 extension UIView {
     func addSubviews(_ views: UIView...) {

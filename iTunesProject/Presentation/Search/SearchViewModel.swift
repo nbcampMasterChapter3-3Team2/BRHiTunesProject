@@ -17,7 +17,7 @@ final class SearchViewModel: ViewModelProtocol {
     }
     
     struct State {
-        let home = BehaviorRelay<[SearchSectionModel]>(value: [])
+        let search = BehaviorRelay<[SearchSectionModel]>(value: [])
     }
     
     var action: AnyObserver<Action> { actionSubject.asObserver() }
@@ -26,7 +26,7 @@ final class SearchViewModel: ViewModelProtocol {
     let state = State()
     let disposeBag = DisposeBag()
     
-    private let useCase = MusicUseCase(repository: MusicRepositoryInterface())
+    private let useCase = SearchUseCase(repository: SearchRepository())
     
     init() {
         bind()
@@ -46,46 +46,32 @@ final class SearchViewModel: ViewModelProtocol {
     }
     
     private func fetchData() {
-        let mockData: [SearchSectionModel] = [
-            SearchSectionModel(
-                header: SearchHeader(title: .search),
-                items: []),
-            SearchSectionModel(
-                header: SearchHeader(title: .podcast),
-                items: [
-                SearchEntity(trackName: "Test", artistName: "Test", artworkURL: "Test", collectionName: "test"),
-                SearchEntity(trackName: "Test", artistName: "Test", artworkURL: "Test", collectionName: "test"),
-                SearchEntity(trackName: "Test", artistName: "Test", artworkURL: "Test", collectionName: "test")
-                ]),
-            SearchSectionModel(
-                header: SearchHeader(title: .movie),
-                items: [
-                    SearchEntity(trackName: "Test", artistName: "Test", artworkURL: "Test", collectionName: "test"),
-                    SearchEntity(trackName: "Test", artistName: "Test", artworkURL: "Test", collectionName: "test"),
-                    SearchEntity(trackName: "Test", artistName: "Test", artworkURL: "Test", collectionName: "test")
-                ])
-        ]
-        
-        self.state.home.accept(mockData)
-        
-//        Single.zip(
-//            useCase.fetchSpringTheme(),
-//            useCase.fetchSummerTheme(),
-//            useCase.fetchFallTheme(),
-//            useCase.fetchWinterTheme())
-//        .map { springs, summers, falls, winters -> [MusicSectionModel] in
-//            return [
-//                MusicSectionModel(header: HomeHeader(title: Season.spring, subTitle: "봄에 어울리는 음악 Best 5"), items: springs),
-//                MusicSectionModel(header: HomeHeader(title: Season.summer, subTitle: "여름에 어울리는 음악"), items: summers),
-//                MusicSectionModel(header: HomeHeader(title: Season.fall, subTitle: "가을에 어울리는 음악"), items: falls),
-//                MusicSectionModel(header: HomeHeader(title: Season.winter, subTitle: "겨울에 어울리는 음악"), items: winters)
-//            ]
-//        }
-//        .subscribe(with: self) { owner, sectionModels in
-//            
-//        } onFailure: { owner, error in
-//            print("Single Zip Error: \(error)")
-//        }
-//        .disposed(by: disposeBag)
+        Single.zip(
+            useCase.fetchPodcasts(search: "marvel"),
+            useCase.fetchMovies(search: "marvel"))
+        .map { podcasts, movies -> [SearchSectionModel] in
+            let podcastItems = podcasts.map { SearchItem.podcast($0) }
+            let movieItems = movies.map { SearchItem.movie($0) }
+            return [
+                SearchSectionModel(
+                    header: SearchHeader(title: .search),
+                    items: []
+                ),
+                SearchSectionModel(
+                    header: SearchHeader(title: .podcast),
+                    items: podcastItems
+                ),
+                SearchSectionModel(
+                    header: SearchHeader(title: .movie),
+                    items: movieItems
+                )
+            ]
+        }
+        .subscribe(with: self) { owner, sectionModels in
+            owner.state.search.accept(sectionModels)
+        } onFailure: { owner, error in
+            print("Single Zip Error: \(error)")
+        }
+        .disposed(by: disposeBag)
     }
 }

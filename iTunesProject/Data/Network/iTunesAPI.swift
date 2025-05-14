@@ -7,10 +7,11 @@
 
 import Foundation
 
-struct iTuensRequest: Encodable {
+struct iTunesRequest: Encodable {
     let term: String
     let country: String
     let media: String
+    let entity: String? = nil
     let limit: Int
 }
 

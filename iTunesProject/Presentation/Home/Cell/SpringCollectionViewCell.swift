@@ -65,6 +65,13 @@ final class SpringCollectionViewCell: BaseCollectionViewCell {
         disposeBag = DisposeBag()
     }
     
+    override func prepare() {
+        self.albumImageView.image = nil
+        self.titleOfSongLabel.text = nil
+        self.singerLabel.text = nil
+        self.subAlbumImageView.image = nil
+    }
+    
     //MARK: - SetStyles
     override func setStyles() {
         super.setStyles()
@@ -110,12 +117,5 @@ final class SpringCollectionViewCell: BaseCollectionViewCell {
         
         self.titleOfSongLabel.text = item.trackName
         self.singerLabel.text = item.artistName
-    }
-    
-    func prepare() {
-        self.albumImageView.image = nil
-        self.titleOfSongLabel.text = nil
-        self.singerLabel.text = nil
-        self.subAlbumImageView.image = nil
     }
 }

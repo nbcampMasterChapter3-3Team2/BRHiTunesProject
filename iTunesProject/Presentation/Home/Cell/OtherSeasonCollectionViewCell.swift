@@ -62,6 +62,14 @@ final class OtherSeasonCollectionViewCell: BaseCollectionViewCell {
         disposeBag = DisposeBag()
     }
     
+    override func prepare() {
+        self.albumImageView.image = nil
+        self.titleOfSongLabel.text = nil
+        self.singerLabel.text = nil
+        self.titleOfAlbumLabel.text = nil
+        self.separator.isHidden = true
+    }
+    
     //MARK: - SetStyles
     override func setStyles() {
         super.setStyles()
@@ -104,13 +112,5 @@ final class OtherSeasonCollectionViewCell: BaseCollectionViewCell {
         self.singerLabel.text = item.artistName
         self.titleOfAlbumLabel.text = item.collectionName
         self.separator.isHidden = isLast
-    }
-    
-    func prepare() {
-        self.albumImageView.image = nil
-        self.titleOfSongLabel.text = nil
-        self.singerLabel.text = nil
-        self.titleOfAlbumLabel.text = nil
-        self.separator.isHidden = true
     }
 }

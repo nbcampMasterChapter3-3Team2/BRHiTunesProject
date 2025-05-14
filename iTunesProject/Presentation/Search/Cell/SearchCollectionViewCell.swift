@@ -12,9 +12,8 @@ import SnapKit
 import Then
 
 final class SearchCollectionViewCell: BaseCollectionViewCell {
-    
+    //MARK: UI Components
     let bgColorView = UIView().then {
-        $0.backgroundColor = .systemGray6
         $0.clipsToBounds = false
         $0.layer.cornerRadius = 15
         $0.layer.cornerCurve = .continuous
@@ -30,23 +29,34 @@ final class SearchCollectionViewCell: BaseCollectionViewCell {
         $0.layer.cornerRadius = 15
         $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         $0.clipsToBounds = true
-        $0.backgroundColor = .systemGreen
     }
     
-    let descriptionLabel = UILabel().then {
-        $0.numberOfLines = 0
+    let recommendedLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 15, weight: .bold)
-        $0.textColor = .systemGray
+        $0.textColor = .secondaryLabel
     }
     
     let titleLabel = UILabel().then {
-        $0.numberOfLines = 0
         $0.font = .systemFont(ofSize: 20, weight: .bold)
         $0.textColor = .label
     }
     
+    let descriptionLabel = UILabel().then {
+        $0.font = .systemFont(ofSize: 13, weight: .bold)
+        $0.textColor = .systemGray
+    }
+    
+    let verticalStackView = UIStackView().then {
+        $0.axis = .vertical
+        $0.alignment = .leading
+        $0.distribution = .equalSpacing
+        $0.spacing = 6
+    }
+    
+    //MARK: Instances
     var disposeBag = DisposeBag()
     
+    //MARK: PrepareForReuse
     override func prepareForReuse() {
         super.prepareForReuse()
         
@@ -54,32 +64,40 @@ final class SearchCollectionViewCell: BaseCollectionViewCell {
         disposeBag = DisposeBag()
     }
     
+    override func prepare() {
+        super.prepare()
+        
+        self.coverImage.image = nil
+        self.titleLabel.text = nil
+        self.descriptionLabel.text = nil
+        self.bgColorView.backgroundColor = nil
+    }
+    
+    //MARK: SetStyles
     override func setStyles() {
         super.setStyles()
         
+        self.contentView.clipsToBounds = false
     }
     
+    //MARK: SetLayouts
     override func setLayouts() {
         super.setLayouts()
         
-        self.contentView.addSubviews(bgColorView, coverImage, descriptionLabel, titleLabel)
+        self.contentView.addSubviews(bgColorView, coverImage, verticalStackView)
+        self.verticalStackView.addArrangedSubviews(recommendedLabel, titleLabel, descriptionLabel)
         
         bgColorView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
         
-        descriptionLabel.snp.makeConstraints {
+        verticalStackView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.horizontalEdges.equalToSuperview().inset(16)
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(descriptionLabel.snp.bottom).offset(8)
-            $0.horizontalEdges.equalToSuperview().inset(16)
-        }
-        
         coverImage.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(16)
+            $0.top.equalTo(verticalStackView.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(coverImage.snp.width)
             $0.bottom.equalToSuperview()
@@ -87,8 +105,24 @@ final class SearchCollectionViewCell: BaseCollectionViewCell {
     }
     
     //MARK: - Methods
-    func configureCell(_ item: SearchEntity) {
-        ImageLoader.shared.loadImage(from: item.artworkURL)
+    func configureCell(_ item: SearchItem) {
+        switch item {
+        case .podcast(let podcast):
+            self.recommendedLabel.text = RecommendEmoji.podcastRecommendations.randomElement()
+            self.titleLabel.text = podcast.trackName
+            self.descriptionLabel.text = podcast.artistName
+            self.loadImageAndSetBackground(url: podcast.artworkURL)
+            
+        case .movie(let movie):
+            self.recommendedLabel.text = "\(String.genreEmoji(for: movie.primaryGenreName)) \(movie.primaryGenreName)"
+            self.titleLabel.text = movie.trackName
+            self.descriptionLabel.text = movie.artistName
+            self.loadImageAndSetBackground(url: movie.artworkURL)
+        }
+    }
+    
+    private func loadImageAndSetBackground(url: String) {
+        ImageLoader.shared.loadImage(from: url)
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, image in
                 owner.coverImage.image = image
@@ -97,15 +131,5 @@ final class SearchCollectionViewCell: BaseCollectionViewCell {
                 }
             }
             .disposed(by: disposeBag)
-        
-        self.titleLabel.text = item.trackName
-        self.descriptionLabel.text = item.artistName
-    }
-    
-    func prepare() {
-        self.coverImage.image = nil
-        self.titleLabel.text = nil
-        self.descriptionLabel.text = nil
-//        self.bgColorView.backgroundColor = nil
     }
 }

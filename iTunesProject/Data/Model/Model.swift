@@ -28,6 +28,11 @@ extension MusicSectionModel: SectionModelType {
     }
 }
 
+enum SearchItem {
+    case podcast(PodcastEntity)
+    case movie(MovieEntity)
+}
+
 struct SearchEntity {
     let trackName: String
     let artistName: String
@@ -41,13 +46,13 @@ struct SearchHeader {
 
 struct SearchSectionModel {
     let header: SearchHeader
-    var items: [SearchEntity]
+    var items: [SearchItem]
 }
 
 extension SearchSectionModel: SectionModelType {
-    typealias Item = SearchEntity
+    typealias Item = SearchItem
     
-    init(original: SearchSectionModel, items: [SearchEntity]) {
+    init(original: SearchSectionModel, items: [SearchItem]) {
         self = original
         self.items = items
     }
