@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class TitleHeaderView: BaseHeaderView {
+final class HomeTitleHeaderView: BaseHeaderView {
     private let titleLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 25, weight: .bold)
         $0.textColor = .label
@@ -33,7 +33,13 @@ final class TitleHeaderView: BaseHeaderView {
         self.prepare()
     }
     
-    //MARK: - SetStyles
+    //MARK: PrePare
+    override func prepare() {
+        self.titleLabel.text = nil
+        self.subtitleLabel.text = nil
+    }
+    
+    //MARK: SetStyles
     override func setStyles() {
         super.setStyles()
         
@@ -41,7 +47,7 @@ final class TitleHeaderView: BaseHeaderView {
         self.stackView.addArrangedSubviews(titleLabel, subtitleLabel)
     }
     
-    //MARK: - SetLayouts
+    //MARK: SetLayouts
     override func setLayouts() {
         stackView.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview().inset(8)
@@ -49,14 +55,9 @@ final class TitleHeaderView: BaseHeaderView {
         }
     }
     
-    //MARK: - Methods
-    func configureView(_ item: Header) {
-        self.titleLabel.text = item.title
+    //MARK: Methods
+    func configureView(_ item: HomeHeader) {
+        self.titleLabel.text = item.title.sectionTitle
         self.subtitleLabel.text = item.subTitle
-    }
-    
-    func prepare() {
-        self.titleLabel.text = nil
-        self.subtitleLabel.text = nil
     }
 }

@@ -315,6 +315,8 @@
 /* Begin XCBuildConfiguration section */
 		143214A62DCC86D00048FF59 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 1432147E2DCC86CE0048FF59 /* iTunesProject */;
+			baseConfigurationReferenceRelativePath = Resources/Config.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
