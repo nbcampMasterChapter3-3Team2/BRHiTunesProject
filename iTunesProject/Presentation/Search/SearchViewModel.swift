@@ -48,6 +48,9 @@ final class SearchViewModel: ViewModelProtocol {
     private func fetchData() {
         let mockData: [SearchSectionModel] = [
             SearchSectionModel(
+                header: SearchHeader(title: .search),
+                items: []),
+            SearchSectionModel(
                 header: SearchHeader(title: .podcast),
                 items: [
                 SearchEntity(trackName: "Test", artistName: "Test", artworkURL: "Test", collectionName: "test"),

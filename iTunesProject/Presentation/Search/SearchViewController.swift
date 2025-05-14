@@ -43,6 +43,8 @@ final class SearchViewController: BaseViewController {
             
             let section = sections[sectionIndex]
             switch section.header.title {
+            case .search:
+                return NSCollectionLayoutSection.searchSectionLayout(sectionIndex: 0)
             case .podcast, .movie:
                 return NSCollectionLayoutSection.searchSectionLayout()
             }
@@ -67,38 +69,40 @@ final class SearchViewController: BaseViewController {
                 let items = dataSource.sectionModels[indexPath.section].items
                 
                 switch header.title {
-                case .podcast:
+                case .search, .podcast, .movie:
                     guard let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: SearchCollectionViewCell.className,
                         for: indexPath) as? SearchCollectionViewCell else {
                         return UICollectionViewCell()
                     }
-                    cell.configureCell(items[indexPath.row])
-                    return cell
-                    
-                case .movie:
-                    guard let cell = collectionView.dequeueReusableCell(
-                        withReuseIdentifier: SearchCollectionViewCell.className,
-                        for: indexPath) as? SearchCollectionViewCell else {
-                        return UICollectionViewCell()
-                    }
-                    
                     cell.configureCell(items[indexPath.row])
                     return cell
                 }
             }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
                 switch kind {
                 case UICollectionView.elementKindSectionHeader:
-                    guard let header = collectionView.dequeueReusableSupplementaryView(
-                        ofKind: UICollectionView.elementKindSectionHeader,
-                        withReuseIdentifier: SearchTitleHeaderVIew.className,
-                        for: indexPath) as? SearchTitleHeaderVIew else {
-                        return UICollectionReusableView()
-                    }
                     let section = dataSource.sectionModels[indexPath.section]
-                    header.configureView(section.header)
-                    return header
                     
+                    switch section.header.title {
+                    case .search:
+                        guard let header = collectionView.dequeueReusableSupplementaryView(
+                            ofKind: UICollectionView.elementKindSectionHeader,
+                            withReuseIdentifier: SearchTitleHeaderVIew.className,
+                            for: indexPath) as? SearchTitleHeaderVIew else {
+                            return UICollectionReusableView()
+                        }
+                        header.configureView(section.header)
+                        return header
+                    case .movie, .podcast:
+                        guard let header = collectionView.dequeueReusableSupplementaryView(
+                            ofKind: UICollectionView.elementKindSectionHeader,
+                            withReuseIdentifier: CategoryTitleHeaderView.className,
+                            for: indexPath) as? CategoryTitleHeaderView else {
+                            return UICollectionReusableView()
+                        }
+                        header.configureView(section.header)
+                        return header
+                    }
                 default:
                     return UICollectionReusableView()
                 }

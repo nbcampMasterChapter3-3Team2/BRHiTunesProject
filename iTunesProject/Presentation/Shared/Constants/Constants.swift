@@ -38,6 +38,7 @@ enum PlaceholderText: String {
 }
 
 enum Search: String {
+    case search = "Search"
     case podcast = "PodCast"
     case movie = "Movie"
 }

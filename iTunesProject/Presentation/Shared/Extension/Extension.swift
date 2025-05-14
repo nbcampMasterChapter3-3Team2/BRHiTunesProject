@@ -7,6 +7,7 @@
 
 import UIKit
 
+//MARK: - Extension NSObject
 extension NSObject {
     var className: String {
         NSStringFromClass(self.classForCoder).components(separatedBy: ".").last!
@@ -17,6 +18,7 @@ extension NSObject {
     }
 }
 
+//MARK: - Extension UIView
 extension UIView {
     func addSubviews(_ views: UIView...) {
         views.forEach {
@@ -25,7 +27,7 @@ extension UIView {
     }
 }
 
-
+//MARK: - Extension UIStackView
 extension UIStackView {
     func addArrangedSubviews(_ views: UIView...) {
         views.forEach {
@@ -34,20 +36,19 @@ extension UIStackView {
     }
 }
 
+//MARK: - Extension NSCollectionLayoutSection
 extension NSCollectionLayoutSection {
     static func springSeasonSectionLayout() -> NSCollectionLayoutSection {
-        // 1) 아이템 하나(앱 카드)
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),   // 그룹 폭의 100 %
-            heightDimension: .fractionalHeight(1.0)  // 배너 이미지 크기에 따라 조정 가능
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = .init(top: 8, leading: 8, bottom: 0, trailing: 8)
         
-        // 2) 그룹 – 아이템 3개를 세로로 쌓음
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.9),   // 화면 폭의 90 %
-            heightDimension: .estimated(200)         // 3 × 90 + inset
+            widthDimension: .fractionalWidth(0.9),
+            heightDimension: .estimated(200)
         )
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: groupSize,
@@ -73,17 +74,15 @@ extension NSCollectionLayoutSection {
     }
     
     static func otherSeasonSectionLayout() -> NSCollectionLayoutSection {
-        // 1) 아이템 하나(앱 카드)
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),   // 그룹 폭의 100 %
+            widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(76)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 //        item.contentInsets = .init(top: 0, leading: 0, bottom: 8, trailing: 0)
         
-        // 2) 그룹 – 아이템 3개를 세로로 쌓음
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.9),   // 화면 폭의 90 %
+            widthDimension: .fractionalWidth(0.9),
             heightDimension: .estimated(228)
         )
         let group = NSCollectionLayoutGroup.vertical(
@@ -112,12 +111,13 @@ extension NSCollectionLayoutSection {
         return section
     }
     
-    static func searchSectionLayout() -> NSCollectionLayoutSection {
+    static func searchSectionLayout(sectionIndex: Int? = nil) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: .estimated(400)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
+//        item.contentInsets = .init(top: 20, leading: 0, bottom: 0, trailing: 0)
         
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -139,9 +139,44 @@ extension NSCollectionLayoutSection {
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .none
         section.boundarySupplementaryItems = [header]
-        section.contentInsets = .init(top: 20, leading: 0, bottom: 20, trailing: 0)
+        section.contentInsets = .init(
+            top: sectionIndex == 0 ? 0 : 8,
+            leading: 0,
+            bottom: sectionIndex == 0 ? 0 : 20,
+            trailing: 0
+        )
         section.interGroupSpacing = 20
         
         return section
+    }
+}
+
+//MARK: - Extension UIImage
+extension UIImage {
+    func averageColor() -> UIColor? {
+        guard let inputImage = CIImage(image: self) else { return nil }
+        
+        let extent = inputImage.extent
+        let filter = CIFilter(name: "CIAreaAverage", parameters: [
+            kCIInputImageKey: inputImage,
+            kCIInputExtentKey: CIVector(cgRect: extent)
+        ])
+        guard let outputImage = filter?.outputImage else { return nil }
+        
+        var bitmap = [UInt8](repeating: 0, count: 4)
+        let context = CIContext()
+        context.render(outputImage,
+                       toBitmap: &bitmap,
+                       rowBytes: 4,
+                       bounds: CGRect(x: 0, y: 0, width: 1, height: 1),
+                       format: .RGBA8,
+                       colorSpace: CGColorSpaceCreateDeviceRGB())
+        
+        return UIColor(
+            red: CGFloat(bitmap[0]) / 255.0,
+            green: CGFloat(bitmap[1]) / 255.0,
+            blue: CGFloat(bitmap[2]) / 255.0,
+            alpha: 1.0
+        )
     }
 }

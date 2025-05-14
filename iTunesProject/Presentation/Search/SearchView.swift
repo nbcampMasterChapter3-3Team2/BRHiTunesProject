@@ -14,6 +14,7 @@ final class SearchView: BaseView {
     //MARK: UI Components
     lazy var searchCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout()).then {
         $0.register(SearchTitleHeaderVIew.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SearchTitleHeaderVIew.className)
+        $0.register(CategoryTitleHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategoryTitleHeaderView.className)
         $0.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.className)
         $0.isScrollEnabled = true
         $0.showsHorizontalScrollIndicator = false
