@@ -14,15 +14,18 @@ import Then
 
 final class HomeViewController: BaseViewController {
     //MARK: - UI Components
-    let searchController = UISearchController().then {
+    lazy var searchController = UISearchController(searchResultsController: searchResultsVC).then {
         $0.searchBar.placeholder = "영화, 팟캐스트"
         $0.obscuresBackgroundDuringPresentation = true
-//        $0.searchResultsController = nil
+        $0.searchResultsUpdater = searchResultsVC
     }
     
     //MARK: - Instances
     let homeView = HomeView()
     let homeViewModel = HomeViewModel()
+    
+    let searchResultsVC = SearchViewController()
+    
     let disposeBag = DisposeBag()
     
     //MARK: - View Life Cycles

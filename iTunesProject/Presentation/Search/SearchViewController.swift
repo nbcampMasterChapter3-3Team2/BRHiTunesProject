@@ -124,3 +124,10 @@ final class SearchViewController: BaseViewController {
     }
     
 }
+
+extension SearchViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        print(className + "에서 호출")
+        print("검색 내용: \(searchController.searchBar.text)")
+    }
+}
