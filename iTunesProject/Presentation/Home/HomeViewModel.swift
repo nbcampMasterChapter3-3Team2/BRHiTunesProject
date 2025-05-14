@@ -47,10 +47,10 @@ final class HomeViewModel: ViewModelProtocol {
     
     private func fetchData() {
         Single.zip(
-            useCase.fetchSpringTheme(),
-            useCase.fetchSummerTheme(),
-            useCase.fetchFallTheme(),
-            useCase.fetchWinterTheme())
+            useCase.fetchSeasonTheme(season: .spring, limit: 5),
+            useCase.fetchSeasonTheme(season: .summer, limit: 15),
+            useCase.fetchSeasonTheme(season: .fall, limit: 15),
+            useCase.fetchSeasonTheme(season: .winter, limit: 15))
         .map { springs, summers, falls, winters -> [MusicSectionModel] in
             return [
                 MusicSectionModel(header: HomeHeader(title: Season.spring, subTitle: "봄에 어울리는 음악 Best 5"), items: springs),

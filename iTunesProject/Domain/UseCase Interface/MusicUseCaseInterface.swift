@@ -10,8 +10,5 @@ import Foundation
 import RxSwift
 
 protocol MusicUseCaseInterface {
-    func fetchSpringTheme() -> Single<[MusicEntity]>
-    func fetchSummerTheme() -> Single<[MusicEntity]>
-    func fetchFallTheme() -> Single<[MusicEntity]>
-    func fetchWinterTheme() -> Single<[MusicEntity]>
+    func fetchSeasonTheme(season: Season, limit: Int) -> Single<[MusicEntity]>
 }

@@ -14,7 +14,7 @@ struct MusicResponse: Decodable {
 
 struct MusicDTO: Decodable {
     let trackName: String
-    let collectionName: String
+    let collectionName: String?
     let artistName: String
     let artworkURL: String
 
@@ -23,11 +23,20 @@ struct MusicDTO: Decodable {
         case artworkURL = "artworkUrl100"
     }
     
+    var albumUrl: String {
+        return artworkURL.replacingOccurrences(of: "100x100", with: "1024x1024")
+    }
+    
+    var thumbnailURL: String {
+        return artworkURL.replacingOccurrences(of: "100x100", with: "320x320")
+    }
+    
     func toEntity() -> MusicEntity {
         MusicEntity(trackName: trackName,
                     collectionName: collectionName,
                     artistName: artistName,
-                    artworkURL: artworkURL)
+                    albumUrl: albumUrl,
+                    thumbnailURL: thumbnailURL)
     }
 }
 
@@ -47,11 +56,15 @@ struct PodcastDTO: Decodable {
         case artworkURL = "artworkUrl100"
     }
     
+    var albumUrl: String {
+        return artworkURL.replacingOccurrences(of: "100x100", with: "1024x1024")
+    }
+    
     func toEntity() -> PodcastEntity {
         PodcastEntity(trackName: trackName,
                       collectionName: collectionName,
                       artistName: artistName,
-                      artworkURL: artworkURL)
+                      albumUrl: albumUrl)
     }
 }
 
@@ -72,11 +85,15 @@ struct MovieDTO: Decodable {
         case artworkURL = "artworkUrl100"
     }
     
+    var albumUrl: String {
+        return artworkURL.replacingOccurrences(of: "100x100", with: "1024x1024")
+    }
+    
     func toEntity() -> MovieEntity {
         MovieEntity(trackName: trackName,
                     collectionName: collectionName,
                     primaryGenreName: primaryGenreName,
                     artistName: artistName,
-                    artworkURL: artworkURL)
+                    albumUrl: albumUrl)
     }
 }

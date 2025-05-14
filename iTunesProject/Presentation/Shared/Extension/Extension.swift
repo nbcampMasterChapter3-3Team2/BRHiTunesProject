@@ -214,3 +214,13 @@ extension UIImage {
         )
     }
 }
+
+extension UIColor {
+    var isDark: Bool {
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        self.getRed(&r, green: &g, blue: &b, alpha: &a)
+        // 표준 밝기 기준
+        let brightness = (r * 299 + g * 587 + b * 114) / 1000
+        return brightness < 0.5
+    }
+}

@@ -17,19 +17,7 @@ final class MusicUseCase: MusicUseCaseInterface {
         self.repository = repository
     }
     
-    func fetchSpringTheme() -> Single<[MusicEntity]> {
-        return repository.springTheme().map { $0.results.map { $0.toEntity() }}
-    }
-    
-    func fetchSummerTheme() -> Single<[MusicEntity]> {
-        return repository.summerTheme().map { $0.results.map { $0.toEntity() }}
-    }
-    
-    func fetchFallTheme() -> Single<[MusicEntity]> {
-        return repository.fallTheme().map { $0.results.map { $0.toEntity() }}
-    }
-    
-    func fetchWinterTheme() -> Single<[MusicEntity]> {
-        return repository.winterTheme().map { $0.results.map { $0.toEntity() }}
+    func fetchSeasonTheme(season: Season, limit: Int) -> Single<[MusicEntity]> {
+        return repository.seasonTheme(season: season, limit: limit).map { $0.results.map { $0.toEntity() }}
     }
 }

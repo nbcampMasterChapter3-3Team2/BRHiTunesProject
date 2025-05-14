@@ -8,10 +8,10 @@
 import Foundation
 
 enum Season: String {
-    case spring
-    case summer
-    case fall
-    case winter
+    case spring = "봄"
+    case summer = "여름"
+    case fall = "가을"
+    case winter = "겨울"
     
     var sectionTitle: String {
         switch self {

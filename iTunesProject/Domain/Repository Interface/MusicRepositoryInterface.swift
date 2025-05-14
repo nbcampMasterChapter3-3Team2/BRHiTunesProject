@@ -10,8 +10,5 @@ import Foundation
 import RxSwift
 
 protocol MusicRepositoryInterface {
-    func springTheme() -> Single<MusicResponse>
-    func summerTheme() -> Single<MusicResponse>
-    func fallTheme() -> Single<MusicResponse>
-    func winterTheme() -> Single<MusicResponse>
+    func seasonTheme(season: Season, limit: Int) -> Single<MusicResponse>
 }

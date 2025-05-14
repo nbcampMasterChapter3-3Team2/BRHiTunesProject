@@ -111,13 +111,13 @@ final class SearchCollectionViewCell: BaseCollectionViewCell {
             self.recommendedLabel.text = RecommendEmoji.podcastRecommendations.randomElement()
             self.titleLabel.text = podcast.trackName
             self.descriptionLabel.text = podcast.artistName
-            self.loadImageAndSetBackground(url: podcast.artworkURL)
+            self.loadImageAndSetBackground(url: podcast.albumUrl)
             
         case .movie(let movie):
             self.recommendedLabel.text = "\(String.genreEmoji(for: movie.primaryGenreName)) \(movie.primaryGenreName)"
             self.titleLabel.text = movie.trackName
             self.descriptionLabel.text = movie.artistName
-            self.loadImageAndSetBackground(url: movie.artworkURL)
+            self.loadImageAndSetBackground(url: movie.albumUrl)
         }
     }
     

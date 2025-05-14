@@ -9,16 +9,17 @@ import Foundation
 
 struct MusicEntity {
     let trackName: String
-    let collectionName: String
+    let collectionName: String?
     let artistName: String
-    let artworkURL: String
+    let albumUrl: String
+    let thumbnailURL: String
 }
 
 struct PodcastEntity {
     let trackName: String
     let collectionName: String
     let artistName: String
-    let artworkURL: String
+    let albumUrl: String
 }
 
 struct MovieEntity {
@@ -26,5 +27,5 @@ struct MovieEntity {
     let collectionName: String
     let primaryGenreName: String
     let artistName: String
-    let artworkURL: String
+    let albumUrl: String
 }
