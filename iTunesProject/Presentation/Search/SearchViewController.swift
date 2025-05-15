@@ -134,6 +134,29 @@ final class SearchViewController: BaseViewController {
         searchViewModel.state.searchResults
             .bind(to: searchView.searchCollectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+        
+        searchView.searchCollectionView.rx.modelSelected(SearchItem.self)
+            .subscribe(with: self) { owner, item in
+                switch item {
+                case .podcast(let podcast):
+                    let transitionDelegate = CardTransitioningDelegate()
+                    if let indexPath = owner.searchView.searchCollectionView.indexPathsForVisibleItems.first,
+                       let cell = owner.searchView.searchCollectionView.cellForItem(at: indexPath) {
+                        transitionDelegate.originFrame = cell.convert(cell.bounds, to: nil)
+                    }
+                    
+                    let detailVC = DetailViewController()
+                    detailVC.modalPresentationStyle = .custom
+                    detailVC.transitioningDelegate = transitionDelegate
+
+                    owner.present(detailVC, animated: true)
+                case .movie(let movie):
+                    return
+                case .empty:
+                    return
+                }
+            }
+            .disposed(by: disposeBag)
     }
     
 }

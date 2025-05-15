@@ -68,6 +68,9 @@ final class HomeViewController: BaseViewController {
         searchResultsVC.dismissSearchController = { [weak self] in
             guard let self else { return }
             self.searchController.isActive = false
+            self.searchController.searchBar.text = ""
+            self.searchController.searchBar.showsCancelButton = false
+            self.searchController.searchBar.resignFirstResponder()
         }
     }
     
