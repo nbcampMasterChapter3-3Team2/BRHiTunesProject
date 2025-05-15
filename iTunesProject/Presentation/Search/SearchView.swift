@@ -16,6 +16,7 @@ final class SearchView: BaseView {
         $0.register(SearchTitleHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SearchTitleHeaderView.className)
         $0.register(CategoryTitleHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategoryTitleHeaderView.className)
         $0.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.className)
+        $0.register(NoSearchCollectionViewCell.self, forCellWithReuseIdentifier: NoSearchCollectionViewCell.className)
         $0.isScrollEnabled = true
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = true

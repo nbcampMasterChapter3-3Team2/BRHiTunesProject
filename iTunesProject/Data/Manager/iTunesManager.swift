@@ -25,6 +25,7 @@ final class iTunesManager {
             
             let queryItems: [URLQueryItem] = [
                 URLQueryItem(name: "term", value: target.term),
+//                URLQueryItem(name: "term", value: target.term.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)),
                 URLQueryItem(name: "country", value: target.country),
                 URLQueryItem(name: "media", value: target.media),
                 URLQueryItem(name: "limit", value: String(target.limit))
@@ -36,7 +37,10 @@ final class iTunesManager {
                 return Disposables.create()
             }
             
-            let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            var request = URLRequest(url: url)
+            request.setValue("iTunesSearchApp/1.0", forHTTPHeaderField: "User-Agent")
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 if let error {
                     single(.failure(error))
                     return

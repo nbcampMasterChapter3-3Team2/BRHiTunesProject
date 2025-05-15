@@ -64,6 +64,7 @@ final class SearchCollectionViewCell: BaseCollectionViewCell {
         disposeBag = DisposeBag()
     }
     
+    //MARK: Prepare
     override func prepare() {
         super.prepare()
         
@@ -108,7 +109,7 @@ final class SearchCollectionViewCell: BaseCollectionViewCell {
     func configureCell(_ item: SearchItem) {
         switch item {
         case .podcast(let podcast):
-            self.recommendedLabel.text = RecommendEmoji.podcastRecommendations.randomElement()
+            self.recommendedLabel.text = podcast.recommedComment
             self.titleLabel.text = podcast.trackName
             self.descriptionLabel.text = podcast.artistName
             self.loadImageAndSetBackground(url: podcast.albumUrl)
@@ -118,6 +119,9 @@ final class SearchCollectionViewCell: BaseCollectionViewCell {
             self.titleLabel.text = movie.trackName
             self.descriptionLabel.text = movie.artistName
             self.loadImageAndSetBackground(url: movie.albumUrl)
+            
+        default:
+            return
         }
     }
     

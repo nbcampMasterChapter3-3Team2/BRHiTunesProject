@@ -31,6 +31,7 @@ extension MusicSectionModel: SectionModelType {
 enum SearchItem {
     case podcast(PodcastEntity)
     case movie(MovieEntity)
+    case empty(query: String)
 }
 
 struct SearchEntity {

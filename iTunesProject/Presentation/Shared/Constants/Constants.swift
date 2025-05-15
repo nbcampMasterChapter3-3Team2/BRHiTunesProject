@@ -37,10 +37,10 @@ enum PlaceholderText: String {
     case homeSearchBar = "영화, 팟캐스트"
 }
 
-enum Search: String {
-    case search = "Search"
-    case podcast = "PodCast"
-    case movie = "Movie"
+enum Search {
+    case search(String)
+    case podcast(String)
+    case movie(String)
 }
 
 enum RecommendEmoji {

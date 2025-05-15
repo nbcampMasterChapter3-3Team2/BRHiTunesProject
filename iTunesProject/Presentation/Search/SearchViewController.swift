@@ -18,6 +18,8 @@ final class SearchViewController: BaseViewController {
     let searchViewModel = SearchViewModel()
     let disposeBag = DisposeBag()
     
+    var dismissSearchController: (() -> Void)?
+    
     override func loadView() {
         super.loadView()
         
@@ -26,8 +28,7 @@ final class SearchViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bindCollectionView()
-        bindAction()
+        bindState()
     }
     
     override func setStyles() {
@@ -38,7 +39,7 @@ final class SearchViewController: BaseViewController {
         searchView.searchCollectionView.collectionViewLayout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env -> NSCollectionLayoutSection? in
             
             guard let self else { return nil }
-            let sections = self.searchViewModel.state.search.value
+            let sections = self.searchViewModel.state.searchResults.value
             guard sectionIndex < sections.count else { return nil }
             
             let section = sections[sectionIndex]
@@ -51,6 +52,7 @@ final class SearchViewController: BaseViewController {
         }
     }
     
+    //MARK: SetLayouts
     override func setLayouts() {
         super.setLayouts()
         
@@ -61,26 +63,36 @@ final class SearchViewController: BaseViewController {
         }
     }
     
-    //MARK: Methods
-    private func bindCollectionView() {
+    //MARK: bindState
+    private func bindState() {
         let dataSource = RxCollectionViewSectionedReloadDataSource<SearchSectionModel>(
             configureCell: { dataSource, collectionView, indexPath, item in
-                let header = dataSource.sectionModels[indexPath.section].header
-                let items = dataSource.sectionModels[indexPath.section].items
-                
-                switch header.title {
-                case .search, .podcast, .movie:
+                switch item {
+                case .podcast(let podcast):
                     guard let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: SearchCollectionViewCell.className,
                         for: indexPath) as? SearchCollectionViewCell else {
                         return UICollectionViewCell()
                     }
-                    switch item {
-                    case .podcast(let podcast):
-                        cell.configureCell(SearchItem.podcast(podcast))
-                    case .movie(let movie):
-                        cell.configureCell(SearchItem.movie(movie))
+                    cell.configureCell(SearchItem.podcast(podcast))
+                    return cell
+                    
+                case .movie(let movie):
+                    guard let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: SearchCollectionViewCell.className,
+                        for: indexPath) as? SearchCollectionViewCell else {
+                        return UICollectionViewCell()
                     }
+                    cell.configureCell(SearchItem.movie(movie))
+                    return cell
+                    
+                case .empty(let query):
+                    guard let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: NoSearchCollectionViewCell.className,
+                        for: indexPath) as? NoSearchCollectionViewCell else {
+                        return UICollectionViewCell()
+                    }
+                    cell.configureCell(SearchItem.empty(query: query))
                     return cell
                 }
             }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
@@ -97,7 +109,13 @@ final class SearchViewController: BaseViewController {
                             return UICollectionReusableView()
                         }
                         header.configureView(section.header)
+                        header.titleButton.rx.tap
+                            .bind(with: self) { owner, _ in
+                                owner.dismissSearchController?()
+                            }
+                            .disposed(by: header.disposeBag)
                         return header
+                        
                     case .movie, .podcast:
                         guard let header = collectionView.dequeueReusableSupplementaryView(
                             ofKind: UICollectionView.elementKindSectionHeader,
@@ -113,21 +131,16 @@ final class SearchViewController: BaseViewController {
                 }
             })
 
-        searchViewModel.state.search
+        searchViewModel.state.searchResults
             .bind(to: searchView.searchCollectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
-    }
-    
-    // MARK: bindAction
-    private func bindAction() {
-        searchViewModel.action.onNext(.viewDidLoad)
     }
     
 }
 
 extension SearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        print(className + "에서 호출")
-        print("검색 내용: \(searchController.searchBar.text)")
+        guard let query = searchController.searchBar.text else { return }
+        searchViewModel.action.onNext(.searchQuery(query))
     }
 }

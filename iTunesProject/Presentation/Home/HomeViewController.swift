@@ -64,6 +64,11 @@ final class HomeViewController: BaseViewController {
                 return NSCollectionLayoutSection.otherSeasonSectionLayout()
             }
         }
+        
+        searchResultsVC.dismissSearchController = { [weak self] in
+            guard let self else { return }
+            self.searchController.isActive = false
+        }
     }
     
     //MARK: SetLayouts

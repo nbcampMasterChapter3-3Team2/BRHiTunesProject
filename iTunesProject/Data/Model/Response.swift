@@ -64,7 +64,8 @@ struct PodcastDTO: Decodable {
         PodcastEntity(trackName: trackName,
                       collectionName: collectionName,
                       artistName: artistName,
-                      albumUrl: albumUrl)
+                      albumUrl: albumUrl,
+                      recommedComment: RecommendEmoji.podcastRecommendations.randomElement())
     }
 }
 

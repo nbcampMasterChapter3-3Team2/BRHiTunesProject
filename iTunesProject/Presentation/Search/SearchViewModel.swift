@@ -11,24 +11,27 @@ import RxSwift
 import RxRelay
 
 final class SearchViewModel: ViewModelProtocol {
+    
     enum Action {
-        case viewDidLoad
-        case didBeginEditing
+        case searchQuery(String)
     }
     
     struct State {
-        let search = BehaviorRelay<[SearchSectionModel]>(value: [])
+        let searchResults = BehaviorRelay<[SearchSectionModel]>(value: [])
     }
     
     var action: AnyObserver<Action> { actionSubject.asObserver() }
     
     private let actionSubject = PublishSubject<Action>()
+    private let queryRelay = PublishRelay<String>()
+    
     let state = State()
     let disposeBag = DisposeBag()
     
     private let useCase = SearchUseCase(repository: SearchRepository())
     
     init() {
+        fetchSearchQuery()
         bind()
     }
     
@@ -36,42 +39,52 @@ final class SearchViewModel: ViewModelProtocol {
         actionSubject
             .subscribe(with: self) { owner, action in
                 switch action {
-                case .viewDidLoad:
-                    owner.fetchData()
-                case .didBeginEditing:
-                    return
+                case .searchQuery(let query):
+                    owner.queryRelay.accept(query)
                 }
             }
             .disposed(by: disposeBag)
     }
     
-    private func fetchData() {
-        Single.zip(
-            useCase.fetchPodcasts(search: "marvel"),
-            useCase.fetchMovies(search: "marvel"))
-        .map { podcasts, movies -> [SearchSectionModel] in
-            let podcastItems = podcasts.map { SearchItem.podcast($0) }
-            let movieItems = movies.map { SearchItem.movie($0) }
-            return [
-                SearchSectionModel(
-                    header: SearchHeader(title: .search),
-                    items: []
-                ),
-                SearchSectionModel(
-                    header: SearchHeader(title: .podcast),
-                    items: podcastItems
-                ),
-                SearchSectionModel(
-                    header: SearchHeader(title: .movie),
-                    items: movieItems
+    private func fetchSearchQuery() {
+        queryRelay
+            .debounce(.milliseconds(1000), scheduler: MainScheduler.asyncInstance)
+            .distinctUntilChanged()
+            .flatMapLatest { [useCase] query in
+                Single.zip(
+                    useCase.fetchPodcasts(search: query),
+                    useCase.fetchMovies(search: query)
                 )
-            ]
-        }
-        .subscribe(with: self) { owner, sectionModels in
-            owner.state.search.accept(sectionModels)
-        } onFailure: { owner, error in
-            print("Single Zip Error: \(error)")
-        }
-        .disposed(by: disposeBag)
+                .map { (query, $0, $1)}
+                .catch { _ in
+                    Single.just((query, [], []))
+                }
+                .asObservable()
+            }
+            .map { query, podcasts, movies -> [SearchSectionModel] in
+                let podcastItems = podcasts.isEmpty ? [SearchItem.empty(query: "'\(query)'에 대한 검색 결과 없음")] : podcasts.map { SearchItem.podcast($0) }
+                let movieItems = movies.isEmpty ? [SearchItem.empty(query: "'\(query)'에 대한 검색 결과 없음")] : movies.map { SearchItem.movie($0) }
+                return [
+                    SearchSectionModel(
+                        header: SearchHeader(title: .search(query)),
+                        items: []
+                    ),
+                    SearchSectionModel(
+                        header: SearchHeader(title: .podcast("PodCast")),
+                        items: podcastItems
+                    ),
+                    SearchSectionModel(
+                        header: SearchHeader(title: .movie("Movie")),
+                        items: movieItems
+                    )
+                ]
+            }
+            .subscribe(with: self) { owner, sectionModels in
+                owner.state.searchResults.accept(sectionModels)
+            } onError: { owner, error in
+                print("FetchSearchQuery Error: \(error)")
+            }
+            .disposed(by: disposeBag)
+        
     }
 }
