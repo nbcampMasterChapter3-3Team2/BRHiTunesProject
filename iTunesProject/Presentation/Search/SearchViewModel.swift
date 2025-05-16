@@ -28,9 +28,11 @@ final class SearchViewModel: ViewModelProtocol {
     let state = State()
     let disposeBag = DisposeBag()
     
-    private let useCase = SearchUseCase(repository: SearchRepository())
+    private let useCase: SearchUseCase
     
-    init() {
+    init(useCase: SearchUseCase) {
+        self.useCase = useCase
+        
         fetchSearchQuery()
         bind()
     }

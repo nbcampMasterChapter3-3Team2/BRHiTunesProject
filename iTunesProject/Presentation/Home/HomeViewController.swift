@@ -14,19 +14,32 @@ import Then
 
 final class HomeViewController: BaseViewController {
     //MARK: - UI Components
-    lazy var searchController = UISearchController(searchResultsController: searchResultsVC).then {
+    lazy var searchController = UISearchController(searchResultsController: searchViewController).then {
         $0.searchBar.placeholder = "영화, 팟캐스트"
         $0.obscuresBackgroundDuringPresentation = true
-        $0.searchResultsUpdater = searchResultsVC
+        $0.searchResultsUpdater = searchViewController
     }
     
     //MARK: - Instances
-    let homeView = HomeView()
-    let homeViewModel = HomeViewModel()
+    private let diContainer: ITunesDIContainerInterface
     
-    let searchResultsVC = SearchViewController()
+    private let homeView = HomeView()
+    private let homeViewModel: HomeViewModel
+    
+    private lazy var searchViewController = diContainer.makeSearchViewController()
     
     let disposeBag = DisposeBag()
+    
+    init(diContainer: ITunesDIContainerInterface) {
+        self.diContainer = diContainer
+        self.homeViewModel = diContainer.makeHomeViewModel()
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     //MARK: - View Life Cycles
     override func loadView() {
@@ -65,7 +78,7 @@ final class HomeViewController: BaseViewController {
             }
         }
         
-        searchResultsVC.dismissSearchController = { [weak self] in
+        searchViewController.dismissSearchController = { [weak self] in
             guard let self else { return }
             self.searchController.isActive = false
             self.searchController.searchBar.text = ""

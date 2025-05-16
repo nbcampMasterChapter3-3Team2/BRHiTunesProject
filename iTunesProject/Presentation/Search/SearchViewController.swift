@@ -16,10 +16,21 @@ final class SearchViewController: BaseViewController {
     
     //MARK: - Instances
     let searchView = SearchView()
-    let searchViewModel = SearchViewModel()
+    let searchViewModel: SearchViewModel
     let disposeBag = DisposeBag()
     
     var dismissSearchController: (() -> Void)?
+    
+    init(searchViewModel: SearchViewModel, dismissSearchController: (() -> Void)? = nil) {
+        self.searchViewModel = searchViewModel
+        self.dismissSearchController = dismissSearchController
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func loadView() {
         super.loadView()
