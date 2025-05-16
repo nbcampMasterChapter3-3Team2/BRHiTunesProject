@@ -20,6 +20,7 @@ struct PodcastEntity {
     let collectionName: String
     let artistName: String
     let albumUrl: String
+    let collectionViewUrl: String
     let recommedComment: String?
 }
 
@@ -29,4 +30,5 @@ struct MovieEntity {
     let primaryGenreName: String
     let artistName: String
     let albumUrl: String
+    let collectionViewUrl: String
 }

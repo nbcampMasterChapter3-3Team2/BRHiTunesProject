@@ -50,9 +50,10 @@ struct PodcastDTO: Decodable {
     let collectionName: String
     let artistName: String
     let artworkURL: String
+    let collectionViewUrl: String
     
     enum CodingKeys: String, CodingKey {
-        case trackName, collectionName, artistName
+        case trackName, collectionName, artistName, collectionViewUrl
         case artworkURL = "artworkUrl100"
     }
     
@@ -65,6 +66,7 @@ struct PodcastDTO: Decodable {
                       collectionName: collectionName,
                       artistName: artistName,
                       albumUrl: albumUrl,
+                      collectionViewUrl: collectionViewUrl,
                       recommedComment: RecommendEmoji.podcastRecommendations.randomElement())
     }
 }
@@ -80,9 +82,10 @@ struct MovieDTO: Decodable {
     let primaryGenreName: String
     let artistName: String
     let artworkURL: String
+    let collectionViewUrl: String
     
     enum CodingKeys: String, CodingKey {
-        case trackName, collectionName, primaryGenreName, artistName
+        case trackName, collectionName, primaryGenreName, artistName, collectionViewUrl
         case artworkURL = "artworkUrl100"
     }
     
@@ -95,6 +98,7 @@ struct MovieDTO: Decodable {
                     collectionName: collectionName,
                     primaryGenreName: primaryGenreName,
                     artistName: artistName,
-                    albumUrl: albumUrl)
+                    albumUrl: albumUrl,
+                    collectionViewUrl: collectionViewUrl)
     }
 }

@@ -13,6 +13,7 @@ import Then
 final class DetailViewController: BaseViewController {
     
     let detailView = DetailView()
+    var urlString: String?
     
     override func loadView() {
         super.loadView()
@@ -29,6 +30,10 @@ final class DetailViewController: BaseViewController {
         super.setStyles()
         
         detailView.dismissButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
+        
+        if let urlString, let url = URL(string: urlString) {
+            detailView.webView.load(URLRequest(url: url))
+        }
     }
     
     override func setLayouts() {

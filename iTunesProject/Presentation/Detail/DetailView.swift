@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import WebKit
 
 import SnapKit
 import Then
@@ -14,19 +15,10 @@ final class DetailView: BaseView {
     //MARK: UI Components
     let dismissButton = UIButton().then {
         $0.setTitle("취소", for: .normal)
+        $0.tintColor = .black
     }
     
-    let coverImage = UIImageView().then {
-        $0.contentMode = .scaleAspectFit
-    }
-    
-    let thumbnailImage = UIImageView().then {
-        $0.contentMode = .scaleAspectFit
-    }
-    
-    let titleLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 20, weight: .bold)
-    }
+    let webView = WKWebView()
     
     override func setStyles() {
         super.setStyles()
@@ -36,11 +28,17 @@ final class DetailView: BaseView {
     override func setLayouts() {
         super.setLayouts()
         
-        self.addSubviews(dismissButton)
+        self.addSubviews(dismissButton, webView)
         
         dismissButton.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).offset(16)
             $0.centerX.equalToSuperview()
+        }
+        
+        webView.snp.makeConstraints {
+            $0.top.equalTo(dismissButton.snp.bottom)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
     }
     

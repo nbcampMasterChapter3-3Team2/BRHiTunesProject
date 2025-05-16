@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 import RxDataSources
 import RxSwift
@@ -139,24 +140,23 @@ final class SearchViewController: BaseViewController {
             .subscribe(with: self) { owner, item in
                 switch item {
                 case .podcast(let podcast):
-                    let transitionDelegate = CardTransitioningDelegate()
-                    if let indexPath = owner.searchView.searchCollectionView.indexPathsForVisibleItems.first,
-                       let cell = owner.searchView.searchCollectionView.cellForItem(at: indexPath) {
-                        transitionDelegate.originFrame = cell.convert(cell.bounds, to: nil)
-                    }
-                    
-                    let detailVC = DetailViewController()
-                    detailVC.modalPresentationStyle = .custom
-                    detailVC.transitioningDelegate = transitionDelegate
-
-                    owner.present(detailVC, animated: true)
+                    owner.presentSafariVC(podcast.collectionViewUrl)
                 case .movie(let movie):
-                    return
+                    owner.presentSafariVC(movie.collectionViewUrl)
                 case .empty:
                     return
                 }
             }
             .disposed(by: disposeBag)
+    }
+    
+    private func presentSafariVC(_ url: String) {
+        if let url = URL(string: url) {
+            let safariVC = SFSafariViewController(url: url)
+            safariVC.modalPresentationStyle = .pageSheet
+            
+            self.present(safariVC, animated: true)
+        }
     }
     
 }
