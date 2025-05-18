@@ -1,5 +1,5 @@
 //
-//  Constants.swift
+//  UIConstants.swift
 //  iTunesProject
 //
 //  Created by 백래훈 on 5/9/25.
@@ -31,16 +31,13 @@ enum iTuensMediaType: String {
 
 enum Description: String {
     case spring = "봄에 어울리는 음악 Best 5"
+    case summer = "여름에 어울리는 음악"
+    case fall = "가을에 어울리는 음악"
+    case winter = "겨울에 어울리는 음악"
 }
 
 enum PlaceholderText: String {
     case homeSearchBar = "영화, 팟캐스트"
-}
-
-enum Search {
-    case search(String)
-    case podcast(String)
-    case movie(String)
 }
 
 enum RecommendEmoji {

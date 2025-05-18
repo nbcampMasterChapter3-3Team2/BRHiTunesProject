@@ -25,15 +25,18 @@ final class SearchTitleHeaderView: BaseHeaderView {
         ]
     }
     
-    let disposeBag = DisposeBag()
+    var disposeBag = DisposeBag()
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.prepare()
+        prepare()
+        
+        disposeBag = DisposeBag()
     }
     
     //MARK: Override
     override func prepare() {
+        super.prepare()
         
     }
     

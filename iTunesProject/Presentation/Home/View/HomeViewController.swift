@@ -13,14 +13,14 @@ import SnapKit
 import Then
 
 final class HomeViewController: BaseViewController {
-    //MARK: - UI Components
-    lazy var searchController = UISearchController(searchResultsController: searchViewController).then {
-        $0.searchBar.placeholder = "영화, 팟캐스트"
+    //MARK: UI Components
+    private lazy var searchController = UISearchController(searchResultsController: searchViewController).then {
+        $0.searchBar.placeholder = PlaceholderText.homeSearchBar.rawValue
         $0.obscuresBackgroundDuringPresentation = true
         $0.searchResultsUpdater = searchViewController
     }
     
-    //MARK: - Instances
+    //MARK: Instances
     private let diContainer: ITunesDIContainerInterface
     
     private let homeView = HomeView()
@@ -28,7 +28,7 @@ final class HomeViewController: BaseViewController {
     
     private lazy var searchViewController = diContainer.makeSearchViewController()
     
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     
     init(diContainer: ITunesDIContainerInterface) {
         self.diContainer = diContainer
@@ -44,15 +44,14 @@ final class HomeViewController: BaseViewController {
     //MARK: - View Life Cycles
     override func loadView() {
         super.loadView()
-        
+
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // UI Layout을 먼저 잡아준 후
+        
         setNavigationBar()
-        bindCollectionView()
-        // action bind
+        bindViewModel()
         bindAction()
         bindEvents()
     }
@@ -63,7 +62,7 @@ final class HomeViewController: BaseViewController {
         
         self.view.backgroundColor = .systemBackground
         
-        homeView.otherSeasonCollectionView.collectionViewLayout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env -> NSCollectionLayoutSection? in
+        homeView.getOtherSeasonCollectionView().collectionViewLayout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env -> NSCollectionLayoutSection? in
             
             guard let self else { return nil }
             let sections = self.homeViewModel.state.home.value
@@ -110,6 +109,7 @@ final class HomeViewController: BaseViewController {
         
     }
     
+    //MARK: SetNavigationBar
     private func setNavigationBar() {
         self.navigationItem.searchController = searchController
         self.navigationController?.navigationBar.prefersLargeTitles = true
@@ -118,8 +118,11 @@ final class HomeViewController: BaseViewController {
         self.navigationItem.title = "Music"
     }
     
-    //MARK: Methods
-    private func bindCollectionView() {
+    //MARK: - Methods
+    //MARK: BindCollectionView
+    override func bindViewModel() {
+        super.bindViewModel()
+        
         let dataSource = RxCollectionViewSectionedReloadDataSource<MusicSectionModel>(
             configureCell: { dataSource, collectionView, indexPath, item in
                 let header = dataSource.sectionModels[indexPath.section].header
@@ -164,7 +167,7 @@ final class HomeViewController: BaseViewController {
             })
 
         homeViewModel.state.home
-            .bind(to: homeView.otherSeasonCollectionView.rx.items(dataSource: dataSource))
+            .bind(to: homeView.getOtherSeasonCollectionView().rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
     }
     
@@ -175,7 +178,7 @@ final class HomeViewController: BaseViewController {
     
     // MARK: bindEvents
     private func bindEvents() {
-        searchController.searchBar.rx.textDidBeginEditing
+        getSearchController().searchBar.rx.textDidBeginEditing
             .bind(with: self) { owner, _ in
                 owner.searchController.searchBar.showsCancelButton = true
                 if let cancelButton = owner.searchController.searchBar.value(forKey: "cancelButton") as? UIButton {
@@ -184,12 +187,16 @@ final class HomeViewController: BaseViewController {
             }
             .disposed(by: disposeBag)
         
-        searchController.searchBar.rx.cancelButtonClicked
+        getSearchController().searchBar.rx.cancelButtonClicked
             .bind(with: self) { owner, _ in
                 owner.searchController.searchBar.text = ""
                 owner.searchController.searchBar.showsCancelButton = false
                 owner.view.endEditing(true)
             }
             .disposed(by: disposeBag)
+    }
+    
+    private func getSearchController() -> UISearchController {
+        return searchController
     }
 }

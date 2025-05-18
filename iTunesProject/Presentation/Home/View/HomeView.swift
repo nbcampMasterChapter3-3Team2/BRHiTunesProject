@@ -12,7 +12,7 @@ import Then
 
 final class HomeView: BaseView {
     //MARK: UI Components
-    lazy var otherSeasonCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout()).then {
+    private lazy var otherSeasonCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout()).then {
         $0.register(HomeTitleHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HomeTitleHeaderView.className)
         $0.register(SpringCollectionViewCell.self, forCellWithReuseIdentifier: SpringCollectionViewCell.className)
         $0.register(OtherSeasonCollectionViewCell.self, forCellWithReuseIdentifier: OtherSeasonCollectionViewCell.className)
@@ -38,6 +38,7 @@ final class HomeView: BaseView {
         }
     }
     
+    //MARK: Methods
     func getOtherSeasonCollectionView() -> UICollectionView {
         return otherSeasonCollectionView
     }

@@ -12,7 +12,7 @@ import Then
 
 final class SearchView: BaseView {
     //MARK: UI Components
-    lazy var searchCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout()).then {
+    private lazy var searchCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout()).then {
         $0.register(SearchTitleHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: SearchTitleHeaderView.className)
         $0.register(CategoryTitleHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CategoryTitleHeaderView.className)
         $0.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: SearchCollectionViewCell.className)
@@ -23,12 +23,14 @@ final class SearchView: BaseView {
         $0.clipsToBounds = false
     }
     
+    //MARK: SetStyles
     override func setStyles() {
         super.setStyles()
         
         self.addSubview(searchCollectionView)
     }
     
+    //MARK: SetLayouts
     override func setLayouts() {
         super.setLayouts()
         
@@ -37,6 +39,7 @@ final class SearchView: BaseView {
         }
     }
     
+    //MARK: Methods
     func getSearchCollectionView() -> UICollectionView {
         return searchCollectionView
     }

@@ -8,9 +8,10 @@
 import UIKit
 
 class BaseViewController: UIViewController {
-    
+    //MARK: Instances
     private lazy var viewControllerName = self.className
     
+    //MARK: View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         bindViewModel()
@@ -25,15 +26,19 @@ class BaseViewController: UIViewController {
         self.view.endEditing(true)
     }
     
-    /// Data 와 UI 를 bind 합니다.
+    //MARK: BindViewModel
     func bindViewModel() {}
-    /// View 의 Style 을 set 합니다.
+    
+    //MARK: SetStyles
     func setStyles() {}
-    /// View 의 Layout 을 set 합니다.
+    
+    //MARK: SetLayouts
     func setLayouts() {}
-    /// View 의 Delegate 을 set 합니다.
+    
+    //MARK: SetDelegates
     func setDelegates() {}
-    /// View 의 Register 를 set 합니다.
+    
+    //MARK: SetRegisters
     func setRegisters() {}
     
     @objc func dismissKeyboard() {

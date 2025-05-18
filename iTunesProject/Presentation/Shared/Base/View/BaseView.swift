@@ -9,6 +9,7 @@ import UIKit
 
 class BaseView: UIView {
     
+    //MARK: Instances
     private lazy var viewName = self.className
     
     override init(frame: CGRect) {
@@ -22,14 +23,16 @@ class BaseView: UIView {
         print("🧵 \(viewName) has been successfully Removed")
     }
     
-    /// View 의 Style 을 set 합니다.
-    func setStyles() {
-        self.backgroundColor = .systemBackground
-    }
-    /// View 의 Layout 을 set 합니다.
-    func setLayouts() {}
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    //MARK: SetStyles
+    func setStyles() {
+        self.backgroundColor = .systemBackground
+    }
+    
+    //MARK: SetLayouts
+    func setLayouts() {}
+    
 }

@@ -13,7 +13,7 @@ import Then
 
 final class SearchCollectionViewCell: BaseCollectionViewCell {
     //MARK: UI Components
-    let bgColorView = UIView().then {
+    private let bgColorView = UIView().then {
         $0.clipsToBounds = false
         $0.layer.cornerRadius = 15
         $0.layer.cornerCurve = .continuous
@@ -24,29 +24,29 @@ final class SearchCollectionViewCell: BaseCollectionViewCell {
         $0.layer.shadowRadius = 10
     }
     
-    let coverImage = UIImageView().then {
+    private let coverImage = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 15
         $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         $0.clipsToBounds = true
     }
     
-    let recommendedLabel = UILabel().then {
+    private let recommendedLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 15, weight: .bold)
         $0.textColor = .secondaryLabel
     }
     
-    let titleLabel = UILabel().then {
+    private let titleLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 20, weight: .bold)
         $0.textColor = .label
     }
     
-    let descriptionLabel = UILabel().then {
+    private let descriptionLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 13, weight: .bold)
         $0.textColor = .systemGray
     }
     
-    let verticalStackView = UIStackView().then {
+    private let verticalStackView = UIStackView().then {
         $0.axis = .vertical
         $0.alignment = .leading
         $0.distribution = .equalSpacing
@@ -54,7 +54,7 @@ final class SearchCollectionViewCell: BaseCollectionViewCell {
     }
     
     //MARK: Instances
-    var disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     
     //MARK: PrepareForReuse
     override func prepareForReuse() {

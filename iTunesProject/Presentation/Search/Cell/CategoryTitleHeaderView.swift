@@ -11,21 +11,24 @@ import SnapKit
 import Then
 
 final class CategoryTitleHeaderView: BaseHeaderView {
+    //MARK: UI Components
     private let titleLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 25, weight: .bold)
         $0.textColor = .label
     }
     
+    //MARK: PrepareForReuse
     override func prepareForReuse() {
         super.prepareForReuse()
         self.prepare()
     }
     
+    //MARK: Prepare
     override func prepare() {
         self.titleLabel.text = nil
     }
     
-    //MARK: - SetStyles
+    //MARK: SetStyles
     override func setStyles() {
         super.setStyles()
         

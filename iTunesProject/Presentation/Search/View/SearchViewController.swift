@@ -13,15 +13,16 @@ import RxSwift
 import SnapKit
 
 final class SearchViewController: BaseViewController {
-    
-    //MARK: - Instances
+    //MARK: Instances
     let searchView = SearchView()
     let searchViewModel: SearchViewModel
     let disposeBag = DisposeBag()
     
     var dismissSearchController: (() -> Void)?
     
-    init(searchViewModel: SearchViewModel, dismissSearchController: (() -> Void)? = nil) {
+    //MARK: Init
+    init(searchViewModel: SearchViewModel,
+         dismissSearchController: (() -> Void)? = nil) {
         self.searchViewModel = searchViewModel
         self.dismissSearchController = dismissSearchController
         
@@ -32,6 +33,7 @@ final class SearchViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: View Life Cycles
     override func loadView() {
         super.loadView()
         
@@ -40,15 +42,16 @@ final class SearchViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bindState()
+        bindViewModel()
     }
     
+    //MARK: SetStyles
     override func setStyles() {
         super.setStyles()
         
         self.view.backgroundColor = .systemBackground
         
-        searchView.searchCollectionView.collectionViewLayout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env -> NSCollectionLayoutSection? in
+        searchView.getSearchCollectionView().collectionViewLayout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env -> NSCollectionLayoutSection? in
             
             guard let self else { return nil }
             let sections = self.searchViewModel.state.searchResults.value
@@ -75,8 +78,10 @@ final class SearchViewController: BaseViewController {
         }
     }
     
-    //MARK: bindState
-    private func bindState() {
+    //MARK: BindViewModel
+    override func bindViewModel() {
+        super.bindViewModel()
+        
         let dataSource = RxCollectionViewSectionedReloadDataSource<SearchSectionModel>(
             configureCell: { dataSource, collectionView, indexPath, item in
                 switch item {
@@ -144,10 +149,10 @@ final class SearchViewController: BaseViewController {
             })
 
         searchViewModel.state.searchResults
-            .bind(to: searchView.searchCollectionView.rx.items(dataSource: dataSource))
+            .bind(to: searchView.getSearchCollectionView().rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
-        searchView.searchCollectionView.rx.modelSelected(SearchItem.self)
+        searchView.getSearchCollectionView().rx.modelSelected(SearchItem.self)
             .subscribe(with: self) { owner, item in
                 switch item {
                 case .podcast(let podcast):

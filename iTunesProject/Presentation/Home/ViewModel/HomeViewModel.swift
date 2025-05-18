@@ -6,20 +6,22 @@
 //
 
 import Foundation
-import UIKit
+
 import RxSwift
 import RxRelay
 
 final class HomeViewModel: ViewModelProtocol {
+    //MARK: Action
     enum Action {
         case viewDidLoad
-        case didBeginEditing
     }
     
+    //MARK: State
     struct State {
         let home = BehaviorRelay<[MusicSectionModel]>(value: [])
     }
     
+    //MARK: Instances
     var action: AnyObserver<Action> { actionSubject.asObserver() }
     
     private let actionSubject = PublishSubject<Action>()
@@ -40,8 +42,6 @@ final class HomeViewModel: ViewModelProtocol {
                 switch action {
                 case .viewDidLoad:
                     owner.fetchData()
-                case .didBeginEditing:
-                    return
                 }
             }
             .disposed(by: disposeBag)
@@ -55,10 +55,10 @@ final class HomeViewModel: ViewModelProtocol {
             useCase.fetchSeasonTheme(season: .winter, limit: 15))
         .map { springs, summers, falls, winters -> [MusicSectionModel] in
             return [
-                MusicSectionModel(header: HomeHeader(title: Season.spring, subTitle: "봄에 어울리는 음악 Best 5"), items: springs),
-                MusicSectionModel(header: HomeHeader(title: Season.summer, subTitle: "여름에 어울리는 음악"), items: summers),
-                MusicSectionModel(header: HomeHeader(title: Season.fall, subTitle: "가을에 어울리는 음악"), items: falls),
-                MusicSectionModel(header: HomeHeader(title: Season.winter, subTitle: "겨울에 어울리는 음악"), items: winters)
+                MusicSectionModel(header: HomeHeader(title: Season.spring, subTitle: Description.spring.rawValue), items: springs),
+                MusicSectionModel(header: HomeHeader(title: Season.summer, subTitle: Description.summer.rawValue), items: summers),
+                MusicSectionModel(header: HomeHeader(title: Season.fall, subTitle: Description.fall.rawValue), items: falls),
+                MusicSectionModel(header: HomeHeader(title: Season.winter, subTitle: Description.winter.rawValue), items: winters)
             ]
         }
         .subscribe(with: self) { owner, sectionModels in

@@ -13,20 +13,20 @@ import Then
 
 final class NoSearchCollectionViewCell: BaseCollectionViewCell {
     //MARK: UI Components
-    let searchIcon = UIImageView().then {
+    private let searchIcon = UIImageView().then {
         $0.contentMode = .scaleAspectFit
         $0.image = UIImage(systemName: "magnifyingglass")
         $0.tintColor = .systemGray
     }
     
-    let searchTitle = UILabel().then {
+    private let searchTitle = UILabel().then {
         $0.textColor = .label
         $0.font = .systemFont(ofSize: 20, weight: .semibold)
         $0.textAlignment = .center
         $0.numberOfLines = 0
     }
     
-    let descriptionLabel = UILabel().then {
+    private let descriptionLabel = UILabel().then {
         $0.text = "맞춤법을 확인하거나 새로운 검색을 시도하십시오."
         $0.textColor = .systemGray
         $0.font = .systemFont(ofSize: 13, weight: .regular)

@@ -11,15 +11,17 @@ import RxSwift
 import RxRelay
 
 final class SearchViewModel: ViewModelProtocol {
-    
+    //MARK: Action
     enum Action {
         case searchQuery(String)
     }
     
+    //MARK: State
     struct State {
         let searchResults = BehaviorRelay<[SearchSectionModel]>(value: [])
     }
     
+    //MARK: Instances
     var action: AnyObserver<Action> { actionSubject.asObserver() }
     
     private let actionSubject = PublishSubject<Action>()

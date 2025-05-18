@@ -1,5 +1,5 @@
 //
-//  iTunesManager.swift
+//  ITunesService.swift
 //  iTunesProject
 //
 //  Created by 백래훈 on 5/8/25.
@@ -9,12 +9,12 @@ import Foundation
 
 import RxSwift
 
-final class iTunesManager {
-    static let shared = iTunesManager()
+final class ITunesService {
+    static let shared = ITunesService()
     
     private init() {}
     
-    func fetchData<T: Decodable>(target: iTunesRequest) -> Single<T> {
+    func fetchData<T: Decodable>(target: ITunesRequest) -> Single<T> {
         return Single.create { single in
             guard let baseUrlString = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String,
                   let baseURL = URL(string: "https://\(baseUrlString)"),

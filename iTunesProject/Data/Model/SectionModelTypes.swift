@@ -1,5 +1,5 @@
 //
-//  Model.swift
+//  SectionModelTypes.swift
 //  iTunesProject
 //
 //  Created by 백래훈 on 5/8/25.
@@ -28,21 +28,20 @@ extension MusicSectionModel: SectionModelType {
     }
 }
 
-enum SearchItem {
-    case podcast(PodcastEntity)
-    case movie(MovieEntity)
-    case empty(query: String)
-}
-
-struct SearchEntity {
-    let trackName: String
-    let artistName: String
-    let artworkURL: String
-    let collectionName: String
+enum Search {
+    case search(String)
+    case podcast(String)
+    case movie(String)
 }
 
 struct SearchHeader {
     let title: Search
+}
+
+enum SearchItem {
+    case podcast(PodcastEntity)
+    case movie(MovieEntity)
+    case empty(query: String)
 }
 
 struct SearchSectionModel {

@@ -1,5 +1,5 @@
 //
-//  BaseHeaderView.swift
+//  BaseCollectionViewCell.swift
 //  iTunesProject
 //
 //  Created by 백래훈 on 5/9/25.
@@ -7,8 +7,8 @@
 
 import UIKit
 
-class BaseHeaderView: UICollectionReusableView {
-    
+class BaseCollectionViewCell: UICollectionViewCell {
+    //MARK: Instances
     private lazy var viewName = self.className
     
     override init(frame: CGRect) {
@@ -21,6 +21,7 @@ class BaseHeaderView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: PrepareForReuse
     override func prepareForReuse() {
         super.prepareForReuse()
     }
