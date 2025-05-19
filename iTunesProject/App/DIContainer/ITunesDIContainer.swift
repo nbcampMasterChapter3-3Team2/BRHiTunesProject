@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ITunesDIContainer: ITunesDIContainerInterface {    
+final class ITunesDIContainer: ITunesDIContainerInterface {
     func makeHomeViewModel() -> HomeViewModel {
         let repository = MusicRepository()
         let useCase = MusicUseCase(repository: repository)

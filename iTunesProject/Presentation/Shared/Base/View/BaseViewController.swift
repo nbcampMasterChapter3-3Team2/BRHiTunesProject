@@ -14,6 +14,7 @@ class BaseViewController: UIViewController {
     //MARK: View Life Cycles
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         bindViewModel()
         setStyles()
         setLayouts()

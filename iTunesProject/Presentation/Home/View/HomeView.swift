@@ -12,10 +12,14 @@ import Then
 
 final class HomeView: BaseView {
     //MARK: UI Components
-    private lazy var otherSeasonCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout()).then {
+    private lazy var otherSeasonCollectionView = UICollectionView(
+        frame: .zero,
+        collectionViewLayout: UICollectionViewFlowLayout()
+    ).then {
         $0.register(HomeTitleHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HomeTitleHeaderView.className)
         $0.register(SpringCollectionViewCell.self, forCellWithReuseIdentifier: SpringCollectionViewCell.className)
         $0.register(OtherSeasonCollectionViewCell.self, forCellWithReuseIdentifier: OtherSeasonCollectionViewCell.className)
+        
         $0.isScrollEnabled = true
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = true

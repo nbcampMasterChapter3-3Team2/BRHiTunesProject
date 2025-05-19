@@ -49,9 +49,8 @@ final class HomeViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         setNavigationBar()
-        bindViewModel()
         bindAction()
         bindEvents()
     }
@@ -63,8 +62,8 @@ final class HomeViewController: BaseViewController {
         self.view.backgroundColor = .systemBackground
         
         homeView.getOtherSeasonCollectionView().collectionViewLayout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env -> NSCollectionLayoutSection? in
-            
             guard let self else { return nil }
+            
             let sections = self.homeViewModel.state.home.value
             guard sectionIndex < sections.count else { return nil }
             
@@ -169,6 +168,7 @@ final class HomeViewController: BaseViewController {
         homeViewModel.state.home
             .bind(to: homeView.getOtherSeasonCollectionView().rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+        
     }
     
     // MARK: bindAction
