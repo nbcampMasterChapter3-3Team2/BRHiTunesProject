@@ -107,13 +107,17 @@ final class SpringCollectionViewCell: BaseCollectionViewCell {
     
     //MARK: - Methods
     func configureCell(_ item: MusicEntity) {
-        ImageLoader.shared.loadImage(from: item.artworkURL)
-            .observe(on: MainScheduler.instance)
-            .subscribe(with: self) { owner, image in
-                owner.albumImageView.image = image
-                owner.subAlbumImageView.image = image
-            }
-            .disposed(by: disposeBag)
+        Single.zip(
+            ImageLoader.shared.loadImage(from: item.albumUrl),
+            ImageLoader.shared.loadImage(from: item.thumbnailURL),
+        )
+        .observe(on: MainScheduler.instance)
+        .subscribe(with: self) { owner, images in
+            let (album, thumnail) = images
+            owner.albumImageView.image = album
+            owner.subAlbumImageView.image = thumnail
+        }
+        .disposed(by: disposeBag)
         
         self.titleOfSongLabel.text = item.trackName
         self.singerLabel.text = item.artistName

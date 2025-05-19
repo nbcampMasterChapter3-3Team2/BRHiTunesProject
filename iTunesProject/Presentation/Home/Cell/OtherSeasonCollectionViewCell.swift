@@ -101,7 +101,7 @@ final class OtherSeasonCollectionViewCell: BaseCollectionViewCell {
     
     //MARK: - Methods
     func configureCell(_ item: MusicEntity, isLast: Bool) {
-        ImageLoader.shared.loadImage(from: item.artworkURL)
+        ImageLoader.shared.loadImage(from: item.thumbnailURL)
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, image in
                 owner.albumImageView.image = image

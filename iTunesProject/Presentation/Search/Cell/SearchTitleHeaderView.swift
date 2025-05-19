@@ -7,43 +7,66 @@
 
 import UIKit
 
+import RxSwift
 import SnapKit
 import Then
 
 final class SearchTitleHeaderView: BaseHeaderView {
     //MARK: - UI Components
-    private let titleLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 30, weight: .bold)
-        $0.textColor = .label
+    let titleButton = UIButton().then {
+        $0.contentHorizontalAlignment = .leading
     }
+    
+    //MARK: - Instance
+    private var titleAttributes: [NSAttributedString.Key: Any] {
+        return [
+            .font: UIFont.systemFont(ofSize: 30, weight: .bold),
+            .foregroundColor: UIColor.label
+        ]
+    }
+    
+    var disposeBag = DisposeBag()
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.prepare()
+        prepare()
+        
+        disposeBag = DisposeBag()
     }
     
     //MARK: Override
     override func prepare() {
-        self.titleLabel.text = nil
+        super.prepare()
+        
     }
     
     //MARK: SetStyles
     override func setStyles() {
         super.setStyles()
         
-        self.addSubview(titleLabel)
+        self.addSubview(titleButton)
     }
     
     //MARK: SetLayouts
     override func setLayouts() {
-        titleLabel.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
+        titleButton.snp.makeConstraints {
+            $0.verticalEdges.equalToSuperview().inset(20)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
     }
     
     //MARK: Methods
     func configureView(_ item: SearchHeader) {
-        self.titleLabel.text = item.title.rawValue
+        switch item.title {
+        case .search(let query):
+            var config = UIButton.Configuration.plain()
+            let attributed = NSAttributedString(string: query, attributes: titleAttributes)
+            config.attributedTitle = AttributedString(attributed)
+            config.contentInsets = .zero
+            
+            self.titleButton.configuration = config
+        default:
+            return
+        }
     }
 }

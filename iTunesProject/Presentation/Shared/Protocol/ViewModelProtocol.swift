@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-// MARK: ViewModel이 꼭 준수해야하는 프로토콜
+// MARK: ViewModelProtocol
 protocol ViewModelProtocol {
     associatedtype Action
     associatedtype State

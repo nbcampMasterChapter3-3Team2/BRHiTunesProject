@@ -13,7 +13,7 @@ import Then
 
 final class SearchCollectionViewCell: BaseCollectionViewCell {
     //MARK: UI Components
-    let bgColorView = UIView().then {
+    private let bgColorView = UIView().then {
         $0.clipsToBounds = false
         $0.layer.cornerRadius = 15
         $0.layer.cornerCurve = .continuous
@@ -24,29 +24,29 @@ final class SearchCollectionViewCell: BaseCollectionViewCell {
         $0.layer.shadowRadius = 10
     }
     
-    let coverImage = UIImageView().then {
+    private let coverImage = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 15
         $0.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         $0.clipsToBounds = true
     }
     
-    let recommendedLabel = UILabel().then {
+    private let recommendedLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 15, weight: .bold)
         $0.textColor = .secondaryLabel
     }
     
-    let titleLabel = UILabel().then {
+    private let titleLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 20, weight: .bold)
         $0.textColor = .label
     }
     
-    let descriptionLabel = UILabel().then {
+    private let descriptionLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 13, weight: .bold)
         $0.textColor = .systemGray
     }
     
-    let verticalStackView = UIStackView().then {
+    private let verticalStackView = UIStackView().then {
         $0.axis = .vertical
         $0.alignment = .leading
         $0.distribution = .equalSpacing
@@ -54,7 +54,7 @@ final class SearchCollectionViewCell: BaseCollectionViewCell {
     }
     
     //MARK: Instances
-    var disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     
     //MARK: PrepareForReuse
     override func prepareForReuse() {
@@ -64,6 +64,7 @@ final class SearchCollectionViewCell: BaseCollectionViewCell {
         disposeBag = DisposeBag()
     }
     
+    //MARK: Prepare
     override func prepare() {
         super.prepare()
         
@@ -108,16 +109,19 @@ final class SearchCollectionViewCell: BaseCollectionViewCell {
     func configureCell(_ item: SearchItem) {
         switch item {
         case .podcast(let podcast):
-            self.recommendedLabel.text = RecommendEmoji.podcastRecommendations.randomElement()
+            self.recommendedLabel.text = podcast.recommedComment
             self.titleLabel.text = podcast.trackName
             self.descriptionLabel.text = podcast.artistName
-            self.loadImageAndSetBackground(url: podcast.artworkURL)
+            self.loadImageAndSetBackground(url: podcast.albumUrl)
             
         case .movie(let movie):
             self.recommendedLabel.text = "\(String.genreEmoji(for: movie.primaryGenreName)) \(movie.primaryGenreName)"
             self.titleLabel.text = movie.trackName
             self.descriptionLabel.text = movie.artistName
-            self.loadImageAndSetBackground(url: movie.artworkURL)
+            self.loadImageAndSetBackground(url: movie.albumUrl)
+            
+        default:
+            return
         }
     }
     

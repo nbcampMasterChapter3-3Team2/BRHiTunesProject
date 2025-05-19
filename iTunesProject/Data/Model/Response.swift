@@ -14,7 +14,7 @@ struct MusicResponse: Decodable {
 
 struct MusicDTO: Decodable {
     let trackName: String
-    let collectionName: String
+    let collectionName: String?
     let artistName: String
     let artworkURL: String
 
@@ -23,11 +23,20 @@ struct MusicDTO: Decodable {
         case artworkURL = "artworkUrl100"
     }
     
+    var albumUrl: String {
+        return artworkURL.replacingOccurrences(of: "100x100", with: "1024x1024")
+    }
+    
+    var thumbnailURL: String {
+        return artworkURL.replacingOccurrences(of: "100x100", with: "320x320")
+    }
+    
     func toEntity() -> MusicEntity {
         MusicEntity(trackName: trackName,
                     collectionName: collectionName,
                     artistName: artistName,
-                    artworkURL: artworkURL)
+                    albumUrl: albumUrl,
+                    thumbnailURL: thumbnailURL)
     }
 }
 
@@ -41,17 +50,24 @@ struct PodcastDTO: Decodable {
     let collectionName: String
     let artistName: String
     let artworkURL: String
+    let collectionViewUrl: String
     
     enum CodingKeys: String, CodingKey {
-        case trackName, collectionName, artistName
+        case trackName, collectionName, artistName, collectionViewUrl
         case artworkURL = "artworkUrl100"
+    }
+    
+    var albumUrl: String {
+        return artworkURL.replacingOccurrences(of: "100x100", with: "1024x1024")
     }
     
     func toEntity() -> PodcastEntity {
         PodcastEntity(trackName: trackName,
                       collectionName: collectionName,
                       artistName: artistName,
-                      artworkURL: artworkURL)
+                      albumUrl: albumUrl,
+                      collectionViewUrl: collectionViewUrl,
+                      recommedComment: RecommendEmoji.podcastRecommendations.randomElement())
     }
 }
 
@@ -66,10 +82,15 @@ struct MovieDTO: Decodable {
     let primaryGenreName: String
     let artistName: String
     let artworkURL: String
+    let collectionViewUrl: String
     
     enum CodingKeys: String, CodingKey {
-        case trackName, collectionName, primaryGenreName, artistName
+        case trackName, collectionName, primaryGenreName, artistName, collectionViewUrl
         case artworkURL = "artworkUrl100"
+    }
+    
+    var albumUrl: String {
+        return artworkURL.replacingOccurrences(of: "100x100", with: "1024x1024")
     }
     
     func toEntity() -> MovieEntity {
@@ -77,6 +98,7 @@ struct MovieDTO: Decodable {
                     collectionName: collectionName,
                     primaryGenreName: primaryGenreName,
                     artistName: artistName,
-                    artworkURL: artworkURL)
+                    albumUrl: albumUrl,
+                    collectionViewUrl: collectionViewUrl)
     }
 }
